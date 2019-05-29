@@ -46,21 +46,21 @@ const Tags = db.define("tags", {
             type: int类型长度为1    0-删除  1-关闭 2-开放
         `
     },
-    create_time: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-        comment: `
-            type: Date类型  标签创建时间
-        `
-    },
-    end_time: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        comment: `
-            allowNull: 不允许为null,
-            type: Date类型  标签最后修改时间
-        `
-    },
+    // create_time: {
+    //     type: Sequelize.DATE,
+    //     defaultValue: Sequelize.NOW,
+    //     comment: `
+    //         type: Date类型  标签创建时间
+    //     `
+    // },
+    // end_time: {
+    //     type: Sequelize.DATE,
+    //     allowNull: false,
+    //     comment: `
+    //         allowNull: 不允许为null,
+    //         type: Date类型  标签最后修改时间
+    //     `
+    // },
     description: {
         type: Sequelize.STRING,
         comment: `
@@ -72,11 +72,27 @@ const Tags = db.define("tags", {
         comment: `
             type: string类型  标签创建作者
         `
-    }
+    },
+    createdAt: {
+		type: Sequelize.DATE,
+		field: 'created_at',
+		allowNull: false,
+		defaultValue: Sequelize.NOW
+	},
+	updatedAt: {
+		type: Sequelize.DATE,
+		field: 'updated_at',
+		allowNull: false,
+		detaultValue: Sequelize.NOW
+	}
 })
 
 
-Tags.sync().then(res => {
+// Tags.sync({
+//     force: true
+// })
+Tags.sync()
+    .then(res => {
     console.log('ok')
 })
 module.exports = Tags;

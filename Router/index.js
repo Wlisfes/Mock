@@ -8,7 +8,7 @@
 
 
 import KoaRouter from 'koa-router'
-import * as Tags from './controller/Tags'
+import Tags from './controller/Tags'
 
 class Router {
     constructor(app) {
@@ -24,20 +24,21 @@ class Router {
     }
 
     Init() {
-        let Api = this.router
-        Api.get('/', async(ctx) => {
-            ctx.body = `<h1>接口首页</h1>`
-        })
-
+        let ctx = this.ctx()
+        Tags(ctx)
         this.Index()
-        this.Mount(Api)
     }
 
-    Mount(Api) {
-        this.app
-            .use(Api.routes())
-            .use(Api.allowedMethods())
+    ctx() {
+        return {
+            router: this.router,
+            app: this.app,
+            Reply: (ctx, coll) => {
+                ctx.body = coll
+            }
+        }
     }
+    
 }
 
 
