@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-29 16:46:54
+ * @LastEditTime: 2019-05-30 13:48:12
  * @Description: 标签接口操作
  */
 
@@ -10,7 +10,7 @@
 import Tags from '../../sql/Model/tags'
 
 
-export default ({ app, router, Reply }) => {
+export default ({ app, router, validator, Reply }) => {
     //获取全部
     router.get('/all/tags', async(ctx) => {
         try {
@@ -29,6 +29,35 @@ export default ({ app, router, Reply }) => {
         }
     })
 
+    //根据id查找
+    router.get('/id/tags', 
+        validator(
+            { query: {
+                    id: validator.isRequire()
+            }},
+            { status: 201, message: "id 缺少" }
+        ),
+        async(ctx) => {            
+            try {
+                let id = ctx.query.id || 1559144847505
+                let res = await Tags.findOne({
+                    where:{ id }
+                })
+                
+                Reply(ctx, {
+                    code: 200,
+                    message: 'ok',
+                    data: res
+                })
+            } catch (error) {
+                Reply(ctx, {
+                    code: 500,
+                    message: '查询失败！',
+                    err: error
+                })
+            }
+    })
+
     //添加
     router.get('/post/tags', async(ctx) => {
         try {
@@ -38,8 +67,11 @@ export default ({ app, router, Reply }) => {
                 color: "#2C93C5",
                 status: 1,
                 description: 'Vue.js是一个用于创建用户界面的开源JavaScript框架，也是一个创建单页应用的Web应用框架。',
-                author: '情雨随风'
+                author: '鱿鱼须'
             }
+
+
+            
             let res = await Tags.create(model)
             Reply(ctx, {
                 code: 200,

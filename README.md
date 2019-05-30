@@ -1,7 +1,7 @@
 # 如何安装与使用
 
 ```
-git clone https://github.com/Wlisfes/admin.git
+git clone git@github.com:Wlisfes/Mock.git
 
 cd admin
 
