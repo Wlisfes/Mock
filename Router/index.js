@@ -11,6 +11,7 @@ import KoaRouter from 'koa-router'
 import validator from '../lib/validator'
 import { code } from '../config'
 import Tags from './controller/Tags'
+import User from './controller/User'
 
 class Router {
     constructor(app) {
@@ -28,6 +29,7 @@ class Router {
     Init() {
         let ctx = this.ctx()
         Tags(ctx)
+        User(ctx)
         this.Index()
     }
 

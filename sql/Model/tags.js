@@ -93,6 +93,6 @@ const Tags = db.define("tags", {
 // })
 Tags.sync()
     .then(res => {
-    console.log('ok')
+    console.log('tags表同步成功！')
 })
 module.exports = Tags;

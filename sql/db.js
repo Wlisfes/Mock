@@ -25,10 +25,10 @@ const db = new Sequelize(
 
 db.authenticate()
     .then(() => {
-        console.log('连接成功！')
+        console.log('数据库连接成功！')
     })
     .catch(()=> {
-        console.log('连接失败！')
+        console.log('数据库连接失败！')
     })
 
 module.exports = db;
