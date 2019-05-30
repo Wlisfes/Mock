@@ -3,7 +3,7 @@
 import Koa from 'koa'
 import logger from 'koa-logger'
 import cors from 'koa-cors'
-import validator from './lib/validator'
+import bodyparser from 'koa-bodyparser'
 import Router from './Router'
 const app = new Koa()
 
@@ -15,8 +15,11 @@ app.use(cors({
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Custom-Header', 'anonymous'],
 }))
+app.use(bodyparser({
+    enableTypes:['json', 'form', 'text']
+}))
 
-new Router(app, validator).Init()
+new Router(app).Init()
 
 
 const port = process.env.PORT || 9800

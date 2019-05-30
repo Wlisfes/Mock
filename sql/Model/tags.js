@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-29 17:05:05
+ * @LastEditTime: 2019-05-30 15:48:53
  * @Description: 标签数据表
  */
 
@@ -42,7 +42,7 @@ const Tags = db.define("tags", {
         type: Sequelize.BIGINT(1),
         defaultValue: 1,
         comment: `
-            defaultValue: 默认0
+            defaultValue: 默认1
             type: int类型长度为1    0-删除  1-关闭 2-开放
         `
     },

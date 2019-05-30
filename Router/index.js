@@ -2,18 +2,19 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-30 10:27:34
+ * @LastEditTime: 2019-05-30 15:29:43
  * @Description: Router实例
  */
 
 
 import KoaRouter from 'koa-router'
+import validator from '../lib/validator'
+import { code } from '../config'
 import Tags from './controller/Tags'
 
 class Router {
-    constructor(app, validator) {
+    constructor(app) {
         this.app = app
-        this.validator = validator
         this.router = KoaRouter({ prefix: '/api' })
     }
 
@@ -34,7 +35,8 @@ class Router {
         return {
             router: this.router,
             app: this.app,
-            validator: this.validator,
+            validator,
+            code,
             Reply: (ctx, coll) => {
                 ctx.body = coll
             }

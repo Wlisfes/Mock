@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:08:34
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-29 17:16:19
+ * @LastEditTime: 2019-05-30 16:32:14
  * @Description: 配置文件
  */
 
@@ -19,4 +19,11 @@ export const SQLCOFN = {
         idle: 10000
     },
     LOGGING: false,                      //关闭日志
+}
+
+
+export const code = {
+    SUCCESS: 200,        //服务器成功返回请求的数据,
+    LACK_ID: 201,        //参数缺失
+    REEOR: 500,           //服务器发生错误，请检查服务器。
 }
