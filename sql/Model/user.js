@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-30 15:48:53
+ * @LastEditTime: 2019-05-31 15:51:20
  * @Description: 用户数据表
  */
 
@@ -67,6 +67,14 @@ const User = db.define('users', {
         comment: `
             defaultValue: 默认1
             type: int类型长度为1  1-女  2-男
+        `
+    },
+    status: {
+        type: Sequelize.BIGINT(1),
+        defaultValue: 2,
+        comment: `
+            defaultValue: 默认1
+            type: int类型长度为1  1-关闭 2-开放
         `
     }
 })
