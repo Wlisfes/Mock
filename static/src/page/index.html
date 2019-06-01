@@ -34,9 +34,20 @@
     <div id="app">
         <el-button type="primary" :style="Style" @click="postUser">注册</el-button>
         <el-button type="primary" :style="Style" @click="loginUser">登录</el-button>
+        <el-button type="primary" :style="Style" @click="AllUser">获取全部用户</el-button>
         <el-button type="primary" :style="Style" @click="updateUserPssw">修改密码</el-button>
         <el-button type="primary" :style="Style" @click="updateUserPhone">更换手机号</el-button>
         <el-button type="primary" :style="Style" @click="postTags">新增标签</el-button>
+        <el-button type="primary" :style="Style" @click="updateTags">修改标签</el-button>
+        <el-button type="primary" :style="Style" @click="AllTags">获取全部标签</el-button>
+        <el-button type="primary" :style="Style" @click="AllOpenTags">获取已开放标签</el-button>
+        <el-button type="primary" :style="Style" @click="AllDownTags">获取已关闭标签</el-button>
+        <el-button type="primary" :style="Style" @click="AllDelTags">获取已删除标签</el-button>
+        <el-button type="primary" :style="Style" @click="idTags">查找id标签</el-button>
+        <el-button type="primary" :style="Style" @click="openTags">开放标签</el-button>
+        <el-button type="primary" :style="Style" @click="downTags">关闭标签</el-button>
+        <el-button type="primary" :style="Style" @click="delTags">删除标签</el-button>
+        
         <el-button type="primary" :style="Style" @click="postArticle">新增文章</el-button>
         <el-button type="primary" :style="Style" @click="AllArticle">获取文章</el-button>
 
@@ -63,6 +74,9 @@
                 loginUser() {
                     Api.loginUser()
                 },
+                AllUser(){
+                    Api.AllUser()
+                },
                 updateUserPssw() {
                     Api.updateUserPssw()
                 },
@@ -72,6 +86,36 @@
                 postTags() {
                     Api.postTags()
                 },
+                updateTags() {
+                    Api.updateTags()
+                },
+                AllTags() {
+                    Api.AllTags()
+                },
+                AllOpenTags() {
+                    Api.AllOpenTags()
+                },
+                AllDownTags(){
+                    Api.AllDownTags()
+                },
+                AllDelTags(){
+                    Api.AllDelTags()
+                },
+                idTags() {
+                    Api.idTags()
+                },
+                openTags() {
+                    Api.openTags()
+                },
+                downTags() {
+                    Api.downTags()
+                },
+                delTags() {
+                    Api.delTags()
+                },
+
+
+
                 postArticle() {
                     Api.postArticle()
                 },

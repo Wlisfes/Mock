@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 00:30:29
+ * @LastEditTime: 2019-06-02 00:43:02
  * @Description: 文章接口操作
  */
 
@@ -21,11 +21,11 @@ export default ({ app, router, validator, Reply, code }) => {
             child: {
                 name: {
                     rule: validator.string().isRequire(),
-                    message: "tags is name 不符合规则"
+                    message: "tags is name 不符合规则！"
                 },
                 color: {
                     rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
-                    message: "tags is color 不符合规则"
+                    message: "tags is color 不符合规则！"
                 }
             },
             method: "POST",
@@ -36,19 +36,19 @@ export default ({ app, router, validator, Reply, code }) => {
             key: {
                 title: {
                     rule: validator.string().isRequire(),
-                    message: "title 不能为空且必须为字符串"
+                    message: "title 不能为空且必须为字符串！"
                 },
                 description: {
                     rule: validator.string().isRequire(),
-                    message: "description 不能为空且必须为字符串"
+                    message: "description 不能为空且必须为字符串！"
                 },
                 context: {
                     rule: validator.string().isRequire(),
-                    message: "context 不能为空且必须为字符串"
+                    message: "context 不能为空且必须为字符串！"
                 },
                 picture: {
                     rule: validator.string().isRequire(),
-                    message: "picture 不能为空且必须为字符"
+                    message: "picture 不能为空且必须为字符！"
                 }
             },
             method: "POST",
