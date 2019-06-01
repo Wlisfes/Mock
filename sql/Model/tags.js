@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-30 15:48:53
+ * @LastEditTime: 2019-06-01 12:25:47
  * @Description: 标签数据表
  */
 
@@ -46,21 +46,6 @@ const Tags = db.define("tags", {
             type: int类型长度为1    0-删除  1-关闭 2-开放
         `
     },
-    // create_time: {
-    //     type: Sequelize.DATE,
-    //     defaultValue: Sequelize.NOW,
-    //     comment: `
-    //         type: Date类型  标签创建时间
-    //     `
-    // },
-    // end_time: {
-    //     type: Sequelize.DATE,
-    //     allowNull: false,
-    //     comment: `
-    //         allowNull: 不允许为null,
-    //         type: Date类型  标签最后修改时间
-    //     `
-    // },
     description: {
         type: Sequelize.STRING,
         comment: `
@@ -69,8 +54,18 @@ const Tags = db.define("tags", {
     },
     author: {
         type: Sequelize.STRING,
+        allowNull: false,
         comment: `
+            allowNull: 不允许为null
             type: string类型  标签创建作者
+        `
+    },
+    uid: {
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        comment: `
+            allowNull: 不允许为null,
+            type: int类型  标签创建作者id
         `
     },
     createdAt: {

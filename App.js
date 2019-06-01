@@ -6,7 +6,9 @@ import cors from 'koa-cors'
 import Static from 'koa-static'
 import views from 'koa-views'
 import bodyparser from 'koa-bodyparser'
+import session from 'koa-session'
 import Router from './Router'
+import { Token } from './config'
 const app = new Koa()
 
 app.use(logger())
@@ -23,6 +25,8 @@ app.use(views(__dirname + '/static/src/page', {
         html: 'nunjucks'
     }
 }))
+app.keys = ["lisfes-sigin"]
+app.use(session(Token, app))
 app.use(bodyparser({
     enableTypes:['json', 'form', 'text']
 }))

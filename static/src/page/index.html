@@ -36,8 +36,9 @@
         <el-button type="primary" :style="Style" @click="loginUser">登录</el-button>
         <el-button type="primary" :style="Style" @click="updateUserPssw">修改密码</el-button>
         <el-button type="primary" :style="Style" @click="updateUserPhone">更换手机号</el-button>
-
-
+        <el-button type="primary" :style="Style" @click="postTags">新增标签</el-button>
+        <el-button type="primary" :style="Style" @click="postArticle">新增文章</el-button>
+        <el-button type="primary" :style="Style" @click="AllArticle">获取文章</el-button>
 
     </div>
     
@@ -67,6 +68,15 @@
                 },
                 updateUserPhone() {
                     Api.updateUserPhone()
+                },
+                postTags() {
+                    Api.postTags()
+                },
+                postArticle() {
+                    Api.postArticle()
+                },
+                AllArticle() {
+                    Api.AllArticle()
                 }
             },
         }).$mount('#app')

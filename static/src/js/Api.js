@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 00:37:51
+ * @LastEditTime: 2019-06-02 00:08:32
  * @Description: 
  */
 
@@ -32,6 +32,7 @@ class HttpApi {
                 sex: 2,
                 description: "项目开发者, 超级管理员！"
             })
+            console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
                     message: res.message,
@@ -51,6 +52,7 @@ class HttpApi {
                 phone: 18676361342,
                 password: "000000"
             })
+            console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
                     message: res.message,
@@ -68,8 +70,9 @@ class HttpApi {
         try {
             let res = await this.post(`/api/update/user/pssw`,{
                 phone: 18676361342,
-                password: "888888"
+                password: "000000"
             })
+            console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
                     message: res.message,
@@ -86,9 +89,10 @@ class HttpApi {
     async updateUserPhone() {
         try {
             let res = await this.post(`/api/update/user/phone`,{
-                uid: 1559319691176,
+                uid: 1559405054382,
                 phone: 18676361342
             })
+            console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
                     message: res.message,
@@ -100,6 +104,68 @@ class HttpApi {
             this.vm.$message.error('server 奔溃')
         }
     }
+
+    //新增标签
+    async postTags() {
+        try {
+            let res = await this.post(`/api/post/tags`,{
+                name: "Koa",
+                color: "#2C93C5",
+                description: "Koa是一个轻量级的Web应用框架。"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //新增文章
+    async postArticle() {
+        try {
+            let res = await this.post(`/api/post/article`,{
+                title: "第一篇文章的标题 title",
+                description: "第一篇文章的描述 description",
+                context: "第一篇文章的内容 context",
+                picture: "第一篇文章的缩略图 picture",
+                tags: [{ name: 'react', color: "#333" }]
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //获取所有文章
+    async AllArticle() {
+        try {
+            let res = await this.get('/api/all/article')
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
 }
 
 

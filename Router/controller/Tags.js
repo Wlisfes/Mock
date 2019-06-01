@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-30 17:53:35
+ * @LastEditTime: 2019-06-02 00:15:12
  * @Description: 标签接口操作
  */
 
@@ -12,30 +12,48 @@ import Tags from '../../sql/Model/tags'
 export default ({ app, router, validator, Reply, code }) => {
     //添加
     router.post('/post/tags',
-        validator.post({
-                name: validator.string().isRequire(),
-                color: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
-                author: validator.string().isRequire(),
-                description: validator.string().isRequire()
-            },{
-                name: "name 错误",
-                color: "color 错误",
-                author: "author 错误",
-                description: "description 错误"
+        validator.isToken(code),
+        validator.isPrams({
+            key: {
+                name: {
+                    rule: validator.string().isRequire(),
+                    message: "name 不能为空且必须为字符串"
+                },
+                color: {
+                    rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
+                    message: "color 不能为空且必须符合十六进制颜色"
+                },
+                description: {
+                    rule: validator.string().isRequire(),
+                    message: "description 不能为空切必须为字符串"
+                }
             },
-            code.LACK_ID
-        ),
+            method: "POST",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
-                let res = await Tags.create({
-                    id: new Date().getTime(),
-                    name: ctx.request.body.name,
-                    color: ctx.request.body.color,
-                    description: ctx.request.body.description,
-                    author: ctx.request.body.author
-                })
-                
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                let session = ctx.session[code.TOKEN]
+                let up = await Tags.findOne({ where: { name: ctx.request.body.name }})
+                if (up !== null) {
+                    Reply(ctx, { code: code.FAIL, message: '标签已存在！', data: up })
+                } else {
+                    let res = await Tags.create({
+                        id: new Date().getTime(),
+                        uid: session.uid,
+                        author: session.nickname,
+                        name: ctx.request.body.name,
+                        color: ctx.request.body.color,
+                        description: ctx.request.body.description
+                    })
+                    
+                    if(res) {
+                        Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                    } else {
+                        Reply(ctx, { code: code.FAIL, message: '添加失败！' })
+                    }
+                }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error })
             }
@@ -44,12 +62,18 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //根据id修改
     router.post('/update/tags',
-        validator(
-                { body: {
-                        id: validator.isRequire()
-                }},
-            { status: code.LACK_ID, message: "id 缺少" }
-        ),
+        validator.isToken(code),
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "POST",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
                 let model = ctx.request.body
@@ -136,13 +160,18 @@ export default ({ app, router, validator, Reply, code }) => {
 
 
     //根据id查找
-    router.get('/id/tags', 
-        validator(
-            { query: {
-                    id: validator.isRequire()
-            }},
-            { status: code.LACK_ID, message: "id 缺少" }
-        ),
+    router.get('/id/tags',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
         async(ctx) => {            
             try {
                 let id = ctx.query.id
@@ -153,7 +182,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if(res !== null) {
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
-                    Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error })
@@ -163,12 +192,18 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //开放
     router.get('/open/tags',
-        validator(
-            { query: {
-                    id: validator.isRequire()
-            }},
-            { status: code.LACK_ID, message: "id 缺少" }
-        ),
+        validator.isToken(code),
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
                 let id = ctx.query.id
@@ -189,7 +224,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     })
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
-                    Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
@@ -199,12 +234,18 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //关闭
     router.get('/down/tags',
-        validator(
-            { query: {
-                    id: validator.isRequire()
-            }},
-            { status: code.LACK_ID, message: "id 缺少" }
-        ),
+        validator.isToken(code),
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
                 let id = ctx.query.id
@@ -226,7 +267,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
-                    Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
@@ -236,12 +277,18 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //删除
     router.get('/del/tags',
-        validator(
-            { query: {
-                    id: validator.isRequire()
-            }},
-            { status: code.LACK_ID, message: "id 缺少" }
-        ),
+        validator.isToken(code),
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
                 let id = ctx.query.id
@@ -262,7 +309,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     })
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
-                    Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '删除失败！', err: error })

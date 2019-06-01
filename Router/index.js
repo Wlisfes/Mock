@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 10:07:33
+ * @LastEditTime: 2019-06-01 22:03:09
  * @Description: Router实例
  */
 
@@ -12,6 +12,7 @@ import validator from '../lib/validator'
 import { code } from '../config'
 import Tags from './controller/Tags'
 import User from './controller/User'
+import Article from './controller/Article'
 
 class Router {
     constructor(app) {
@@ -30,6 +31,7 @@ class Router {
         let ctx = this.ctx()
         Tags(ctx)
         User(ctx)
+        Article(ctx)
         this.Index()
     }
 

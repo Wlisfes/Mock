@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-31 15:51:20
+ * @LastEditTime: 2019-06-01 22:01:48
  * @Description: 用户数据表
  */
 
@@ -78,6 +78,8 @@ const User = db.define('users', {
         `
     }
 })
+
+
 
 
 // User.sync({
