@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-05-30 15:29:43
+ * @LastEditTime: 2019-06-01 10:07:33
  * @Description: Router实例
  */
 
@@ -21,8 +21,8 @@ class Router {
 
     Index() {
         this.app.use(async (ctx, next) => {
-            ctx.body = `<h1>Hello World</h1>`
-            next()
+            await ctx.render('index.html')
+            await next()
         })
     }
 

@@ -4,6 +4,7 @@ import Koa from 'koa'
 import logger from 'koa-logger'
 import cors from 'koa-cors'
 import Static from 'koa-static'
+import views from 'koa-views'
 import bodyparser from 'koa-bodyparser'
 import Router from './Router'
 const app = new Koa()
@@ -17,6 +18,11 @@ app.use(cors({
     allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Custom-Header', 'anonymous'],
 }))
 app.use(Static(__dirname + '/static'))
+app.use(views(__dirname + '/static/src/page', {
+    map: {
+        html: 'nunjucks'
+    }
+}))
 app.use(bodyparser({
     enableTypes:['json', 'form', 'text']
 }))

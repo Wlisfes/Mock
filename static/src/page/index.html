@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link rel="icon" href="../../image/icon/favicon.ico">
+    <link href="https://unpkg.com/element-ui@2.9.1/lib/theme-chalk/index.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        html {
+            background-color: #333333;
+        }
+        #app {
+            width: 100%;
+            min-height: 100vh;
+            max-width: 750px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-button type="primary" :style="Style" @click="postUser">注册</el-button>
+        <el-button type="primary" :style="Style" @click="loginUser">登录</el-button>
+        <el-button type="primary" :style="Style" @click="updateUserPssw">修改密码</el-button>
+        <el-button type="primary" :style="Style" @click="updateUserPhone">更换手机号</el-button>
+
+
+
+    </div>
+    
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <script src="/src/js/Api.js"></script>
+    <script>
+        
+        const vm =  new Vue({
+            data() {
+                return {
+                    Style: {
+                        margin: '24px 0 0'
+                    }
+                }
+            },
+            methods: {
+                postUser() {
+                    Api.postUser()
+                },
+                loginUser() {
+                    Api.loginUser()
+                },
+                updateUserPssw() {
+                    Api.updateUserPssw()
+                },
+                updateUserPhone() {
+                    Api.updateUserPhone()
+                }
+            },
+        }).$mount('#app')
+        const Api = new HttpApi(vm)
+    </script>
+</body>
+</html>

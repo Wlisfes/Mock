@@ -24,6 +24,7 @@ export const SQLCOFN = {
 
 export const code = {
     SUCCESS: 200,        //服务器成功返回请求的数据,
-    LACK_ID: 201,        //参数缺失 或已被占用
+    LACK_ID: 201,        //参数缺失
+    FAIL: 202,           //数据库查询为空 或已被占用
     REEOR: 500,          //服务器发生错误，请检查服务器。
 }
