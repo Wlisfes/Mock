@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 01:07:18
+ * @LastEditTime: 2019-06-03 00:24:04
  * @Description: 
  */
 
@@ -317,7 +317,11 @@ class HttpApi {
                 description: "第一篇文章的描述 description",
                 context: "第一篇文章的内容 context",
                 picture: "第一篇文章的缩略图 picture",
-                tags: [{ name: 'react', color: "#333" }]
+                tags: [
+                    { name: 'React', color: '#333333' },
+                    { name: 'Vue', color: '#2C93C5'},
+                    { name: 'Koa', color: '#2C93C5'}
+                ]
             })
             console.log(res)
             if(res.code === 200) 
@@ -348,6 +352,134 @@ class HttpApi {
             this.vm.$message.error('server 奔溃')
         }
     }
+
+    //获取已开放文章
+    async AllOpenArticle() {
+        try {
+            let res = await this.get('/api/all/open/article')
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //获取已关闭文章
+    async AllDownArticle() {
+        try {
+            let res = await this.get('/api/all/down/article')
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //获取已删除表
+    async AllDelArticle() {
+        try {
+            let res = await this.get('/api/all/del/article')
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //开放文章
+    async openArticle() {
+        try {
+            let res = await this.get(`/api/open/article`,{
+                id: "eab345838723c0737a69276141a50613"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //关闭文章
+    async downArticle() {
+        try {
+            let res = await this.get(`/api/down/article`,{
+                id: "eab345838723c0737a69276141a50613"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //关闭文章
+    async delArticle() {
+        try {
+            let res = await this.get(`/api/del/article`,{
+                id: "eab345838723c0737a69276141a50613"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //根据id查找文章
+    async idArticle() {
+        try {
+            let res = await this.get(`/api/id/article`,{
+                id: "eab345838723c0737a69276141a50613"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
 
 }
 
