@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 00:07:39
+ * @LastEditTime: 2019-06-02 11:40:27
  * @Description: 用户接口操作
  */
 
@@ -69,7 +69,7 @@ export default ({ app, router, validator, Reply, code }) => {
      
     //获取所有用户
     router.get('/all/user',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         async(ctx) => {
             try {
                 let res = await User.findAll()
@@ -167,7 +167,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //更换手机号
     router.post('/update/user/phone',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 uid: {

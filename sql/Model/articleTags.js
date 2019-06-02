@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 18:15:18
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 20:01:09
+ * @LastEditTime: 2019-06-02 15:44:28
  * @Description: 文章标签子表
  */
 
@@ -11,7 +11,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const ArticleTags = db.define('article_tags', {
-    pid: {
+    id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -21,7 +21,7 @@ const ArticleTags = db.define('article_tags', {
             autoIncrement: 自增
         `
     },
-    id: {
+    article_id: {
         type: Sequelize.STRING,
         allowNull: false,
         comment: `

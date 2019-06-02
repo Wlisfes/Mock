@@ -2,16 +2,20 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 00:43:02
+ * @LastEditTime: 2019-06-02 15:42:33
  * @Description: 文章接口操作
  */
 
 import Article from '../../sql/Model/article'
+import ArticleTags from '../../sql/Model/articleTags'
+
+Article.hasMany(ArticleTags, { foreignKey: 'article_id' })
+ArticleTags.belongsTo(Article,{ foreignKey:'category_id' })
 
 export default ({ app, router, validator, Reply, code }) => {
     //添加文章
     router.post('/post/article',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isArr({
             key: {
                 keys: "tags",
@@ -58,7 +62,7 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let session = ctx.session[code.TOKEN]
-                let { title,description,context,picture } = ctx.request.body
+                let { title,description,context,picture,tags } = ctx.request.body
                 let model = {
                     id: validator.MD5(new Date().getTime()),
                     uid: session.uid,
@@ -66,12 +70,13 @@ export default ({ app, router, validator, Reply, code }) => {
                     author: session.nickname,
                     description: description,
                     context: context,
-                    picture: picture
+                    picture: picture,
+                    tags: tags
                 }
 
-                // let res = await Article.create(model)
+                let res = await Article.create(model)
 
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: model })
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error })
             }

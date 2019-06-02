@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 00:15:12
+ * @LastEditTime: 2019-06-02 11:41:18
  * @Description: 标签接口操作
  */
 
@@ -12,7 +12,7 @@ import Tags from '../../sql/Model/tags'
 export default ({ app, router, validator, Reply, code }) => {
     //添加
     router.post('/post/tags',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 name: {
@@ -62,7 +62,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //根据id修改
     router.post('/update/tags',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -192,7 +192,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //开放
     router.get('/open/tags',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -234,7 +234,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //关闭
     router.get('/down/tags',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -277,7 +277,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //删除
     router.get('/del/tags',
-        validator.isToken(code),
+        validator.isToken({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {

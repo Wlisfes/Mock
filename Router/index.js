@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 22:03:09
+ * @LastEditTime: 2019-06-02 15:29:20
  * @Description: Router实例
  */
 
@@ -13,6 +13,8 @@ import { code } from '../config'
 import Tags from './controller/Tags'
 import User from './controller/User'
 import Article from './controller/Article'
+
+
 
 class Router {
     constructor(app) {

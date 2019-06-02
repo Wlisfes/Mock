@@ -2,14 +2,14 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 15:56:14
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 19:50:23
+ * @LastEditTime: 2019-06-02 15:44:07
  * @Description: 文章数据表
  */
 
 
 const Sequelize = require('sequelize')
 const db = require('../db')
-const ArticleTags = require('./articleTags')
+// const ArticleTags = require('../Model/articleTags')
 
 const Article = db.define("article", {
     id: {
@@ -112,6 +112,10 @@ Article.sync()
     .then(res => {
     console.log('article表同步成功')
 })
+
+
+// Article.hasMany(ArticleTags, { foreignKey: 'article_id' })
+// ArticleTags.belongsTo(Article,{ foreignKey:'category_id' })
 
 
 module.exports = Article;
