@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 18:15:18
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:06:03
+ * @LastEditTime: 2019-06-03 23:38:47
  * @Description: 标签子表
  */
 
@@ -21,12 +21,20 @@ const Tagske = db.define('tagske', {
             autoIncrement: 自增
         `
     },
+    tagsfirst_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        comment: `
+            allowNull: 不允许为null,
+            type: string类型  标签原始id
+        `
+    },
     tagid: {
         type: Sequelize.STRING,
         allowNull: false,
         comment: `
             allowNull: 不允许为null,
-            type: string类型  文章id
+            type: string类型  对应的数据id
         `
     },
     name: {
@@ -51,13 +59,13 @@ const Tagske = db.define('tagske', {
 })
 
 
-// Tagske.sync({
-//     force: true
-// })
-
-Tagske.sync()
-    .then(res => {
-    console.log('article_tags表同步成功')
+Tagske.sync({
+    force: true
 })
+
+// Tagske.sync()
+//     .then(res => {
+//     console.log('article_tags表同步成功')
+// })
 
 module.exports = Tagske;

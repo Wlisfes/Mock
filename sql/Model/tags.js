@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 22:50:39
+ * @LastEditTime: 2019-06-03 23:38:40
  * @Description: 标签数据表
  */
 
@@ -86,11 +86,11 @@ const Tags = db.define("tags", {
 })
 
 
-// Tags.sync({
-//     force: true
-// })
-Tags.sync()
-    .then(res => {
-    console.log('tags表同步成功！')
+Tags.sync({
+    force: true
 })
+// Tags.sync()
+//     .then(res => {
+//     console.log('tags表同步成功！')
+// })
 module.exports = Tags;

@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:07:00
+ * @LastEditTime: 2019-06-03 23:42:52
  * @Description: 文章接口操作
  */
 
@@ -27,6 +27,10 @@ export default ({ app, router, validator, Reply, code }) => {
                 color: {
                     rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
                     message: "tags is color 不符合规则！"
+                },
+                id: {
+                    rule: validator.string().isRequire(),
+                    message: "tags is id 不符合规则！"
                 }
             },
             method: "POST",
@@ -64,6 +68,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 let tagsModel = tags.map(el => {
                     return {
                         tagid: id,
+                        tagsfirst_id: el.id,
                         name: el.name,
                         color: el.color
                     }

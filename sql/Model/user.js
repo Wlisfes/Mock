@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 22:50:14
+ * @LastEditTime: 2019-06-03 23:39:02
  * @Description: 用户数据表
  */
 
@@ -82,13 +82,13 @@ const User = db.define('user', {
 })
 
 
-// User.sync({
-//     force: true
-// })
-
-User.sync()
-    .then(res => {
-    console.log('users表同步成功')
+User.sync({
+    force: true
 })
+
+// User.sync()
+//     .then(res => {
+//     console.log('users表同步成功')
+// })
 
 module.exports = User;

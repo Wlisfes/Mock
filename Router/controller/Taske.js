@@ -2,12 +2,13 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 22:33:56
+ * @LastEditTime: 2019-06-03 23:43:38
  * @Description: 项目接口操作
  */
 
 
 import Taske from '../../sql/Model/taske'
+import Tagske from '../../sql/Model/tagske'
 
 export default ({ app, router, validator, Reply, code }) => {
 
@@ -28,6 +29,10 @@ export default ({ app, router, validator, Reply, code }) => {
                 color: {
                     rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
                     message: "tags is color 不符合规则！"
+                },
+                id: {
+                    rule: validator.string().isRequire(),
+                    message: "tags is id 不符合规则！"
                 }
             },
             method: "POST",
@@ -62,6 +67,14 @@ export default ({ app, router, validator, Reply, code }) => {
                 let session = ctx.session[code.TOKEN]
                 let { name,description,github,viewUrl,tags } = ctx.request.body
                 let id = validator.MD5(new Date().getTime())
+                let tagsModel = tags.map(el => {
+                    return {
+                        tagid: id,
+                        tagsfirst_id: el.id,
+                        name: el.name,
+                        color: el.color
+                    }
+                })
 
                 let res = await Taske.create({
                     id,
@@ -76,22 +89,14 @@ export default ({ app, router, validator, Reply, code }) => {
                     viewUrl
                 })
 
-                // let res = {
-                //     id,
-                //     uid: session.uid,
-                //     author: session.nickname,
-                //     avatar: session.avatar,
-                //     name,
-                //     description,
-                //     github,
-                //     viewUrl
-                // }
-                
+                let tagsval = await Tagske.bulkCreate(tagsModel)
+                let data = (() => {
+                    let el = res.get()
+                    el.tags = tagsval
+                    return el
+                })()
 
-                
-
-
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
             }
