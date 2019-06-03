@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 00:24:04
+ * @LastEditTime: 2019-06-03 17:55:37
  * @Description: 
  */
 
@@ -480,6 +480,24 @@ class HttpApi {
         }
     }
 
+    //根据id点赞文章
+    async sukiArticle() {
+        try {
+            let res = await this.get(`/api/suki/article`,{
+                id: "eab345838723c0737a69276141a50613"
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
 
 }
 

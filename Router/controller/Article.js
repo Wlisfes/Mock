@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 00:28:19
+ * @LastEditTime: 2019-06-03 17:57:10
  * @Description: 文章接口操作
  */
 
@@ -296,7 +296,7 @@ export default ({ app, router, validator, Reply, code }) => {
             }
     })
 
-    //根据id查找文章
+    //根据id查找文章  此接口每调用一次会增加一次阅读数
     router.get('/id/article',
         validator.isPrams({
             key: {
@@ -316,21 +316,80 @@ export default ({ app, router, validator, Reply, code }) => {
                     raw: true,
                     where:{ id }
                 })
-                let tag = await ArticleTags.findAll({
-                    raw: true,
-                    where: { article_id: id }
-                })
-                let data = (() => {
-                    res.tags = tag
-                    return res
-                })()
+                
+                if(res !== null) {
+                    await Article.update({ read: res.read + 1 },{ where: { id } })
+                    let upres = await Article.findOne({
+                        raw: true,
+                        where:{ id }
+                    })
+                    let tag = await ArticleTags.findAll({
+                        raw: true,
+                        where: { article_id: id }
+                    })
+                    let data = (() => {
+                        upres.tags = tag
+                        return upres
+                    })()
 
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
+                }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
             }
     })
 
+    //文章点赞
+    router.get('/suki/article',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let id = ctx.query.id
+                let res = await Article.findOne({
+                    raw: true,
+                    where:{ id }
+                })
+                
+                if(res !== null) {
+                    await Article.update({ suki: res.suki + 1 },{ where: { id } })
+                    let upres = await Article.findOne({
+                        raw: true,
+                        where:{ id }
+                    })
+                    let tag = await ArticleTags.findAll({
+                        raw: true,
+                        where: { article_id: id }
+                    })
+                    let data = (() => {
+                        upres.tags = tag
+                        return upres
+                    })()
+
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
+                }
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '点赞失败！', err: error.toString() })
+            }
+        }
+    )
+
+    
 
     app.use(router.routes(), router.allowedMethods())
 }

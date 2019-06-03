@@ -58,7 +58,12 @@
         <el-button type="primary" :style="Style" @click="downArticle">关闭文章</el-button>
         <el-button type="primary" :style="Style" @click="delArticle">删除文章</el-button>
         <el-button type="primary" :style="Style" @click="idArticle">查找id文章</el-button>
+        <el-button type="primary" :style="Style" @click="sukiArticle">点赞文章</el-button>
         
+
+
+
+
 
     </div>
     
@@ -148,6 +153,9 @@
                 },
                 idArticle() {
                     Api.idArticle()
+                },
+                sukiArticle() {
+                    Api.sukiArticle()
                 }
 
 
