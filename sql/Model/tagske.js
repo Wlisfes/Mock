@@ -2,15 +2,15 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 18:15:18
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 15:44:28
- * @Description: 文章标签子表
+ * @LastEditTime: 2019-06-03 23:06:03
+ * @Description: 标签子表
  */
 
 
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const ArticleTags = db.define('article_tags', {
+const Tagske = db.define('tagske', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -21,7 +21,7 @@ const ArticleTags = db.define('article_tags', {
             autoIncrement: 自增
         `
     },
-    article_id: {
+    tagid: {
         type: Sequelize.STRING,
         allowNull: false,
         comment: `
@@ -45,16 +45,19 @@ const ArticleTags = db.define('article_tags', {
             type: string类型  十六进制颜色
         `
     }
+},
+{
+    freezeTableName: true,
 })
 
 
-// ArticleTags.sync({
+// Tagske.sync({
 //     force: true
 // })
 
-ArticleTags.sync()
+Tagske.sync()
     .then(res => {
     console.log('article_tags表同步成功')
 })
 
-module.exports = ArticleTags;
+module.exports = Tagske;

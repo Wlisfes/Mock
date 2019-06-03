@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 17:55:37
+ * @LastEditTime: 2019-06-03 22:18:55
  * @Description: 
  */
 
@@ -498,6 +498,35 @@ class HttpApi {
             this.vm.$message.error('server 奔溃')
         }
     }
+
+    //新增项目
+    async postTaske() {
+        try {
+            let res = await this.post(`/api/post/taske`, {
+                name: "VueAdmin",
+                description: "使用Vue、ant-design-vue构建的后台管理系统。",
+                github: "https://github.com/Wlisfes/AntAdmin",
+                viewUrl: "http://ant.lisfes.cn",
+                tags: [
+                    { name: 'React', color: '#333333' },
+                    { name: 'Vue', color: '#2C93C5'},
+                    { name: 'Koa', color: '#2C93C5'}
+                ]
+            })
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+
 
 }
 

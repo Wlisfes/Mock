@@ -24,7 +24,7 @@
             background-color: #FFFFFF;
             display: flex;
             flex-direction: column;
-            padding: 0 24px;
+            padding: 0 24px 24px;
             box-sizing: border-box;
         }
 
@@ -59,9 +59,9 @@
         <el-button type="primary" :style="Style" @click="delArticle">删除文章</el-button>
         <el-button type="primary" :style="Style" @click="idArticle">查找id文章</el-button>
         <el-button type="primary" :style="Style" @click="sukiArticle">点赞文章</el-button>
+        <el-button type="primary" :style="Style" @click="postTaske">新增项目</el-button>
+
         
-
-
 
 
 
@@ -156,6 +156,9 @@
                 },
                 sukiArticle() {
                     Api.sukiArticle()
+                },
+                postTaske() {
+                    Api.postTaske()
                 }
 
 

@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 12:25:47
+ * @LastEditTime: 2019-06-03 22:50:39
  * @Description: 标签数据表
  */
 
@@ -61,7 +61,7 @@ const Tags = db.define("tags", {
         `
     },
     uid: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         allowNull: false,
         comment: `
             allowNull: 不允许为null,
@@ -80,6 +80,9 @@ const Tags = db.define("tags", {
 		allowNull: false,
 		detaultValue: Sequelize.NOW
 	}
+},
+{
+    freezeTableName: true,
 })
 
 

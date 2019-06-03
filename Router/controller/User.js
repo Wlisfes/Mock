@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 11:40:27
+ * @LastEditTime: 2019-06-03 23:01:10
  * @Description: 用户接口操作
  */
 
@@ -49,17 +49,21 @@ export default ({ app, router, validator, Reply, code }) => {
                 if (up !== null) {
                     Reply(ctx, { code: code.FAIL, message: '手机号已被注册！' })
                 } else {
+                    let { phone,password,nickname,sex,description,avatar } = ctx.request.body
+                    let uid = validator.MD5(new Date().getTime())
                     let res = await User.create({
-                        uid: new Date().getTime(),
-                        phone: ctx.request.body.phone,
-                        password: ctx.request.body.password,
-                        nickname: ctx.request.body.nickname,
-                        sex: ctx.request.body.sex,
-                        description: ctx.request.body.description,
-                        avatar: "1557678889694.jpg",
-                        status: 2
+                        uid,
+                        phone,
+                        password,
+                        nickname,
+                        sex,
+                        description,
+                        avatar: "1557678889694.jpg"
+                        // () => (avatar ? avatar : sex === 0 ? "1557678889694.jpg" : "1557678889694.jpg")
                     })
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res})
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+
+                    // Reply(ctx, { code: code.SUCCESS, message: 'ok' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '注册失败！', err: error })

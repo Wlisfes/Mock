@@ -2,12 +2,12 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 17:57:10
+ * @LastEditTime: 2019-06-03 23:07:00
  * @Description: 文章接口操作
  */
 
 import Article from '../../sql/Model/article'
-import ArticleTags from '../../sql/Model/articleTags'
+import Tagske from '../../sql/Model/tagske'
 
 export default ({ app, router, validator, Reply, code }) => {
     //添加文章
@@ -63,7 +63,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
-                        article_id: id,
+                        tagid: id,
                         name: el.name,
                         color: el.color
                     }
@@ -77,9 +77,15 @@ export default ({ app, router, validator, Reply, code }) => {
                     context,
                     picture,
                 })
-                let tagsval = await ArticleTags.bulkCreate(tagsModel)
+                let tagsval = await Tagske.bulkCreate(tagsModel)
 
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res, tagsval })
+                let data = (() => {
+                    let el = res.get()
+                    el.tags = tagsval
+                    return el
+                })()
+
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
             }
@@ -89,12 +95,12 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/article', async(ctx) => {
         try {
             let res = await Article.findAll({ raw: true })
-            let tag = await ArticleTags.findAll({ raw: true })
+            let tag = await Tagske.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.article_id)
+                el.tags = tag.filter(e => el.id === e.tagid)
                 return el
             })
-
+            
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
         } catch (error) {
             Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
@@ -112,9 +118,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await ArticleTags.findAll({ raw: true })
+            let tag = await Tagske.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.article_id)
+                el.tags = tag.filter(e => el.id === e.tagid)
                 return el
             })
 
@@ -135,9 +141,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await ArticleTags.findAll({ raw: true })
+            let tag = await Tagske.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.article_id)
+                el.tags = tag.filter(e => el.id === e.tagid)
                 return el
             })
 
@@ -158,9 +164,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await ArticleTags.findAll({ raw: true })
+            let tag = await Tagske.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.article_id)
+                el.tags = tag.filter(e => el.id === e.tagid)
                 return el
             })
 
@@ -323,9 +329,9 @@ export default ({ app, router, validator, Reply, code }) => {
                         raw: true,
                         where:{ id }
                     })
-                    let tag = await ArticleTags.findAll({
+                    let tag = await Tagske.findAll({
                         raw: true,
-                        where: { article_id: id }
+                        where: { tagid: id }
                     })
                     let data = (() => {
                         upres.tags = tag
@@ -369,9 +375,9 @@ export default ({ app, router, validator, Reply, code }) => {
                         raw: true,
                         where:{ id }
                     })
-                    let tag = await ArticleTags.findAll({
+                    let tag = await Tagske.findAll({
                         raw: true,
-                        where: { article_id: id }
+                        where: { tagid: id }
                     })
                     let data = (() => {
                         upres.tags = tag

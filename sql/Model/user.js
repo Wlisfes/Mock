@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 22:01:48
+ * @LastEditTime: 2019-06-03 22:50:14
  * @Description: 用户数据表
  */
 
@@ -10,9 +10,9 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const User = db.define('users', {
+const User = db.define('user', {
     uid: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         primaryKey: true,
         allowNull: false,
         comment: `
@@ -77,14 +77,15 @@ const User = db.define('users', {
             type: int类型长度为1  1-关闭 2-开放
         `
     }
+},{
+    freezeTableName: true,
 })
-
-
 
 
 // User.sync({
 //     force: true
 // })
+
 User.sync()
     .then(res => {
     console.log('users表同步成功')

@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-02 11:41:18
+ * @LastEditTime: 2019-06-03 22:56:27
  * @Description: 标签接口操作
  */
 
@@ -39,13 +39,15 @@ export default ({ app, router, validator, Reply, code }) => {
                 if (up !== null) {
                     Reply(ctx, { code: code.FAIL, message: '标签已存在！', data: up })
                 } else {
+                    let { name,color,description } = ctx.request.body
+                    let id = validator.MD5(new Date().getTime())
                     let res = await Tags.create({
-                        id: new Date().getTime(),
+                        id,
                         uid: session.uid,
                         author: session.nickname,
-                        name: ctx.request.body.name,
-                        color: ctx.request.body.color,
-                        description: ctx.request.body.description
+                        name,
+                        color,
+                        description
                     })
                     
                     if(res) {
