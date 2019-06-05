@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:01:10
+ * @LastEditTime: 2019-06-06 00:41:20
  * @Description: 用户接口操作
  */
 
@@ -109,7 +109,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 })
                 if (up !== null) {
                     if(up.password === ctx.request.body.password) {
-                        ctx.session[code.TOKEN] = up
+                        validator.setStore( ctx, code.TOKEN, up)
                         Reply(ctx, { code: code.SUCCESS, message: 'ok', data: up })
                     } else {
                         Reply(ctx, { code: code.FAIL, message: '密码错误！' })
@@ -122,6 +122,13 @@ export default ({ app, router, validator, Reply, code }) => {
             }
     })
 
+    //登出
+    router.get('/logout/user',
+        validator.isToken({ code ,Reply }),
+        async(ctx) => {
+            validator.removeStore(ctx, code.TOKEN)
+            Reply(ctx, { code: code.SUCCESS, message: 'ok' })
+    })
 
     //修改密码
     router.post('/update/user/pssw',
