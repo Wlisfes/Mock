@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:35:49
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:38:55
+ * @LastEditTime: 2019-06-04 15:37:05
  * @Description: 项目数据表
  */
 
@@ -98,12 +98,12 @@ const Taske = db.define("taske",{
     freezeTableName: true,
 })
 
-Taske.sync({
-    force: true
-})
-// Taske.sync()
-//     .then(res => {
-//     console.log('taske表同步成功')
+// Taske.sync({
+//     force: true
 // })
+Taske.sync()
+    .then(res => {
+    console.log('taske表同步成功')
+})
 
 module.exports = Taske;

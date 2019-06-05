@@ -1,16 +1,17 @@
 /*
+ * @Date: 2019-06-04 15:27:58
  * @Author: 情雨随风
- * @Date: 2019-06-01 18:15:18
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:38:47
- * @Description: 标签子表
+ * @LastEditTime: 2019-06-04 15:37:11
+ * @Description: 项目标签子表
  */
 
 
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Tagske = db.define('tagske', {
+
+const TaskeTags = db.define('taske_tags', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -29,7 +30,7 @@ const Tagske = db.define('tagske', {
             type: string类型  标签原始id
         `
     },
-    tagid: {
+    tag_id: {
         type: Sequelize.STRING,
         allowNull: false,
         comment: `
@@ -59,13 +60,18 @@ const Tagske = db.define('tagske', {
 })
 
 
-Tagske.sync({
-    force: true
-})
-
-// Tagske.sync()
-//     .then(res => {
-//     console.log('article_tags表同步成功')
+// TaskeTags.sync({
+//     force: true
 // })
 
-module.exports = Tagske;
+TaskeTags.sync()
+    .then(res => {
+    console.log('taske_tags表同步成功')
+})
+
+module.exports = TaskeTags;
+
+
+
+
+

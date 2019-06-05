@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:38:40
+ * @LastEditTime: 2019-06-04 15:44:46
  * @Description: 标签数据表
  */
 
@@ -13,13 +13,13 @@ const db = require('../db')
 
 const Tags = db.define("tags", {
     id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
         primaryKey: true,
         allowNull: false,
         comment: `
             primaryKey: 主键
             allowNull: 不允许为null,
-            type: int类型   标签id
+            type: string类型   标签id
         `
     },
     name: {
@@ -86,11 +86,11 @@ const Tags = db.define("tags", {
 })
 
 
-Tags.sync({
-    force: true
-})
-// Tags.sync()
-//     .then(res => {
-//     console.log('tags表同步成功！')
+// Tags.sync({
+//     force: true
 // })
+Tags.sync()
+    .then(res => {
+    console.log('tags表同步成功！')
+})
 module.exports = Tags;

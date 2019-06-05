@@ -2,12 +2,12 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:42:52
+ * @LastEditTime: 2019-06-04 15:31:07
  * @Description: 文章接口操作
  */
 
 import Article from '../../sql/Model/article'
-import Tagske from '../../sql/Model/tagske'
+import ArticleTags from '../../sql/Model/articleTags'
 
 export default ({ app, router, validator, Reply, code }) => {
     //添加文章
@@ -67,7 +67,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
-                        tagid: id,
+                        tag_id: id,
                         tagsfirst_id: el.id,
                         name: el.name,
                         color: el.color
@@ -82,7 +82,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     context,
                     picture,
                 })
-                let tagsval = await Tagske.bulkCreate(tagsModel)
+                let tagsval = await ArticleTags.bulkCreate(tagsModel)
 
                 let data = (() => {
                     let el = res.get()
@@ -100,9 +100,9 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/article', async(ctx) => {
         try {
             let res = await Article.findAll({ raw: true })
-            let tag = await Tagske.findAll({ raw: true })
+            let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.tagid)
+                el.tags = tag.filter(e => el.id === e.tag_id)
                 return el
             })
             
@@ -123,9 +123,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await Tagske.findAll({ raw: true })
+            let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.tagid)
+                el.tags = tag.filter(e => el.id === e.tag_id)
                 return el
             })
 
@@ -146,9 +146,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await Tagske.findAll({ raw: true })
+            let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.tagid)
+                el.tags = tag.filter(e => el.id === e.tag_id)
                 return el
             })
 
@@ -169,9 +169,9 @@ export default ({ app, router, validator, Reply, code }) => {
                     ['createdAt', 'desc']
                 ]
             })
-            let tag = await Tagske.findAll({ raw: true })
+            let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
-                el.tags = tag.filter(e => el.id === e.tagid)
+                el.tags = tag.filter(e => el.id === e.tag_id)
                 return el
             })
 
@@ -334,9 +334,9 @@ export default ({ app, router, validator, Reply, code }) => {
                         raw: true,
                         where:{ id }
                     })
-                    let tag = await Tagske.findAll({
+                    let tag = await ArticleTags.findAll({
                         raw: true,
-                        where: { tagid: id }
+                        where: { tag_id: id }
                     })
                     let data = (() => {
                         upres.tags = tag
@@ -380,9 +380,9 @@ export default ({ app, router, validator, Reply, code }) => {
                         raw: true,
                         where:{ id }
                     })
-                    let tag = await Tagske.findAll({
+                    let tag = await ArticleTags.findAll({
                         raw: true,
-                        where: { tagid: id }
+                        where: { tag_id: id }
                     })
                     let data = (() => {
                         upres.tags = tag

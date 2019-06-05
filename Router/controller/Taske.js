@@ -2,13 +2,13 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:43:38
+ * @LastEditTime: 2019-06-04 15:47:51
  * @Description: 项目接口操作
  */
 
 
 import Taske from '../../sql/Model/taske'
-import Tagske from '../../sql/Model/tagske'
+import TaskeTags from '../../sql/Model/taskeTags'
 
 export default ({ app, router, validator, Reply, code }) => {
 
@@ -69,7 +69,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
-                        tagid: id,
+                        tag_id: id,
                         tagsfirst_id: el.id,
                         name: el.name,
                         color: el.color
@@ -89,7 +89,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     viewUrl
                 })
 
-                let tagsval = await Tagske.bulkCreate(tagsModel)
+                let tagsval = await TaskeTags.bulkCreate(tagsModel)
                 let data = (() => {
                     let el = res.get()
                     el.tags = tagsval

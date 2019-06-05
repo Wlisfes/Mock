@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 22:18:55
+ * @LastEditTime: 2019-06-04 15:40:04
  * @Description: 
  */
 
@@ -126,9 +126,9 @@ class HttpApi {
     async postTags() {
         try {
             let res = await this.post(`/api/post/tags`,{
-                name: "Koa",
+                name: "React",
                 color: "#2C93C5",
-                description: "Koa是一个轻量级的Web应用框架。"
+                description: "React是一个构建数据驱动的js库。"
             })
             console.log(res)
             if(res.code === 200) 
@@ -318,9 +318,7 @@ class HttpApi {
                 context: "第一篇文章的内容 context",
                 picture: "第一篇文章的缩略图 picture",
                 tags: [
-                    { name: 'React', color: '#333333' },
-                    { name: 'Vue', color: '#2C93C5'},
-                    { name: 'Koa', color: '#2C93C5'}
+                    { name: 'Koa', color: '#2C93C5', id: "4f92d63cf5200add7a8416e907e248fc" }
                 ]
             })
             console.log(res)

@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 15:56:14
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 23:38:31
+ * @LastEditTime: 2019-06-04 15:36:51
  * @Description: 文章数据表
  */
 
@@ -108,14 +108,14 @@ const Article = db.define("article", {
 })
 
 
-Article.sync({
-    force: true
-})
-
-// Article.sync()
-//     .then(res => {
-//     console.log('article表同步成功')
+// Article.sync({
+//     force: true
 // })
+
+Article.sync()
+    .then(res => {
+    console.log('article表同步成功')
+})
 
 
 module.exports = Article;
