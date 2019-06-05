@@ -2,12 +2,12 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:40:04
+ * @LastEditTime: 2019-06-05 17:50:09
  * @Description: 
  */
 
 
-axios.defaults.baseURL='http://localhost:9800'
+axios.defaults.baseURL='http://localhost:9800/api'
 
 //请求拦截器
 axios.interceptors.request.use(res => res, err => Promise.reject(err))
@@ -25,8 +25,8 @@ class HttpApi {
     //注册
     async postUser() {
         try {
-            let res = await this.post(`/api/post/user`,{
-                phone: 18676361342,
+            let res = await this.post(`/post/user`,{
+                phone: 18888888888,
                 password: "000000",
                 nickname: "情雨随风",
                 sex: 2,
@@ -48,8 +48,8 @@ class HttpApi {
     //登录
     async loginUser() {
         try {
-            let res = await this.post(`/api/login/user`,{
-                phone: 18676361342,
+            let res = await this.post(`/login/user`,{
+                phone: 18888888888,
                 password: "000000"
             })
             console.log(res)
@@ -68,7 +68,7 @@ class HttpApi {
     //获取全部用户
     async AllUser() {
         try {
-            let res = await this.get('/api/all/user')
+            let res = await this.get('/all/user')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -85,7 +85,7 @@ class HttpApi {
     //改密
     async updateUserPssw() {
         try {
-            let res = await this.post(`/api/update/user/pssw`,{
+            let res = await this.post(`/update/user/pssw`,{
                 phone: 18676361342,
                 password: "000000"
             })
@@ -105,7 +105,7 @@ class HttpApi {
     //更换手机号
     async updateUserPhone() {
         try {
-            let res = await this.post(`/api/update/user/phone`,{
+            let res = await this.post(`/update/user/phone`,{
                 uid: 1559405054382,
                 phone: 18676361342
             })
@@ -125,7 +125,7 @@ class HttpApi {
     //新增标签
     async postTags() {
         try {
-            let res = await this.post(`/api/post/tags`,{
+            let res = await this.post(`/post/tags`,{
                 name: "React",
                 color: "#2C93C5",
                 description: "React是一个构建数据驱动的js库。"
@@ -146,7 +146,7 @@ class HttpApi {
     //修改标签
     async updateTags() {
         try {
-            let res = await this.post(`/api/update/tags`,{
+            let res = await this.post(`/update/tags`,{
                 id: 1559405521695,
                 name: "Vue",
                 description: `Vue是一个构建数据驱动的 web 界面的渐进式框架。Vue.js 的目标是通过尽可
@@ -168,7 +168,7 @@ class HttpApi {
     //获取全部标签
     async AllTags() {
         try {
-            let res = await this.get('/api/all/tags')
+            let res = await this.get('/all/tags')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -185,7 +185,7 @@ class HttpApi {
     //获取已开放标签
     async AllOpenTags() {
         try {
-            let res = await this.get('/api/all/open/tags')
+            let res = await this.get('/all/open/tags')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -202,7 +202,7 @@ class HttpApi {
     //获取已关闭标签
     async AllDownTags() {
         try {
-            let res = await this.get('/api/all/down/tags')
+            let res = await this.get('/all/down/tags')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -219,7 +219,7 @@ class HttpApi {
     //获取已删除标签
     async AllDelTags() {
         try {
-            let res = await this.get('/api/all/del/tags')
+            let res = await this.get('/all/del/tags')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -236,7 +236,7 @@ class HttpApi {
     //查找id标签
     async idTags() {
         try {
-            let res = await this.get(`/api/id/tags`,{
+            let res = await this.get(`/id/tags`,{
                 id: 1559405521695
             })
             console.log(res)
@@ -255,7 +255,7 @@ class HttpApi {
     //开放标签
     async openTags() {
         try {
-            let res = await this.get(`/api/open/tags`,{
+            let res = await this.get(`/open/tags`,{
                 id: 1559405521695
             })
             console.log(res)
@@ -274,7 +274,7 @@ class HttpApi {
     //关闭标签
     async downTags() {
         try {
-            let res = await this.get(`/api/down/tags`,{
+            let res = await this.get(`/down/tags`,{
                 id: 1559405521695
             })
             console.log(res)
@@ -293,7 +293,7 @@ class HttpApi {
     //删除标签
     async delTags() {
         try {
-            let res = await this.get(`/api/del/tags`,{
+            let res = await this.get(`/del/tags`,{
                 id: 1559405521695
             })
             console.log(res)
@@ -312,7 +312,7 @@ class HttpApi {
     //新增文章
     async postArticle() {
         try {
-            let res = await this.post(`/api/post/article`,{
+            let res = await this.post(`/post/article`,{
                 title: "第一篇文章的标题 title",
                 description: "第一篇文章的描述 description",
                 context: "第一篇文章的内容 context",
@@ -337,7 +337,7 @@ class HttpApi {
     //获取所有文章
     async AllArticle() {
         try {
-            let res = await this.get('/api/all/article')
+            let res = await this.get('/all/article')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -354,7 +354,7 @@ class HttpApi {
     //获取已开放文章
     async AllOpenArticle() {
         try {
-            let res = await this.get('/api/all/open/article')
+            let res = await this.get('/all/open/article')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -371,7 +371,7 @@ class HttpApi {
     //获取已关闭文章
     async AllDownArticle() {
         try {
-            let res = await this.get('/api/all/down/article')
+            let res = await this.get('/all/down/article')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -388,7 +388,7 @@ class HttpApi {
     //获取已删除表
     async AllDelArticle() {
         try {
-            let res = await this.get('/api/all/del/article')
+            let res = await this.get('/all/del/article')
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({
@@ -405,7 +405,7 @@ class HttpApi {
     //开放文章
     async openArticle() {
         try {
-            let res = await this.get(`/api/open/article`,{
+            let res = await this.get(`/open/article`,{
                 id: "eab345838723c0737a69276141a50613"
             })
             console.log(res)
@@ -424,7 +424,7 @@ class HttpApi {
     //关闭文章
     async downArticle() {
         try {
-            let res = await this.get(`/api/down/article`,{
+            let res = await this.get(`/down/article`,{
                 id: "eab345838723c0737a69276141a50613"
             })
             console.log(res)
@@ -443,7 +443,7 @@ class HttpApi {
     //关闭文章
     async delArticle() {
         try {
-            let res = await this.get(`/api/del/article`,{
+            let res = await this.get(`/del/article`,{
                 id: "eab345838723c0737a69276141a50613"
             })
             console.log(res)
@@ -462,7 +462,7 @@ class HttpApi {
     //根据id查找文章
     async idArticle() {
         try {
-            let res = await this.get(`/api/id/article`,{
+            let res = await this.get(`/id/article`,{
                 id: "eab345838723c0737a69276141a50613"
             })
             console.log(res)
@@ -481,7 +481,7 @@ class HttpApi {
     //根据id点赞文章
     async sukiArticle() {
         try {
-            let res = await this.get(`/api/suki/article`,{
+            let res = await this.get(`/suki/article`,{
                 id: "eab345838723c0737a69276141a50613"
             })
             console.log(res)
@@ -500,7 +500,7 @@ class HttpApi {
     //新增项目
     async postTaske() {
         try {
-            let res = await this.post(`/api/post/taske`, {
+            let res = await this.post(`/post/taske`, {
                 name: "VueAdmin",
                 description: "使用Vue、ant-design-vue构建的后台管理系统。",
                 github: "https://github.com/Wlisfes/AntAdmin",
