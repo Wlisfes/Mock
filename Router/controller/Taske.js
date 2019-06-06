@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:47:51
+ * @LastEditTime: 2019-06-06 23:39:35
  * @Description: 项目接口操作
  */
 
@@ -103,7 +103,19 @@ export default ({ app, router, validator, Reply, code }) => {
     })
 
 
+    //获取所有项目
+    router.get('/all/taske', async(ctx) => {
+        try {
+            let res = await Taske.findAll({ raw: true })
+            let tag = await TaskeTags.findAll({ raw: true })
 
+            
+
+            Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+        } catch (error) {
+            Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
+        }
+    })
 
 
 
