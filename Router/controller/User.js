@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-06 00:41:20
+ * @LastEditTime: 2019-06-09 01:09:47
  * @Description: 用户接口操作
  */
 
@@ -77,6 +77,12 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let res = await User.findAll()
+                // let res = await User.findAll({
+                //     order: [
+                //         //根据created_at字段倒序排序
+                //         ['created_at', 'desc']
+                //     ]
+                // })
 
                 Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
             } catch (error) {

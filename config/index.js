@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:08:34
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-01 17:10:30
+ * @LastEditTime: 2019-06-09 01:08:11
  * @Description: 配置文件
  */
 
@@ -25,7 +25,7 @@ export const SQLCOFN = {
 //session配置
 export const Token = {
     key: 'TOKEN',
-    maxAge: 120000,
+    maxAge: 60 * 60 * 60 * 1000,
     autoCommit: true,
     overwrite: true,
     httpOnly: true,

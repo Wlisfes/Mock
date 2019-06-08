@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-03 22:56:27
+ * @LastEditTime: 2019-06-09 00:52:16
  * @Description: 标签接口操作
  */
 
@@ -51,7 +51,14 @@ export default ({ app, router, validator, Reply, code }) => {
                     })
                     
                     if(res) {
-                        Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                        let upres = await Tags.findAll({
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                        
+                        Reply(ctx, { code: code.SUCCESS, message: 'ok', data: upres })
                     } else {
                         Reply(ctx, { code: code.FAIL, message: '添加失败！' })
                     }
@@ -86,7 +93,12 @@ export default ({ app, router, validator, Reply, code }) => {
                     }
                 )
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Tags.findAll()
+                    let res = await Tags.findAll({
+                        order: [
+                            //根据created_at字段倒序排序
+                            ['created_at', 'desc']
+                        ]
+                    })
 
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
@@ -101,7 +113,12 @@ export default ({ app, router, validator, Reply, code }) => {
     //获取全部
     router.get('/all/tags', async(ctx) => {
         try {
-            let res = await Tags.findAll()
+            let res = await Tags.findAll({
+                order: [
+                    //根据created_at字段倒序排序
+                    ['created_at', 'desc']
+                ]
+            })
 
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
         } catch (error) {
@@ -217,13 +234,23 @@ export default ({ app, router, validator, Reply, code }) => {
                 )
     
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Tags.findAll({
-                        where: { status: 2 },
-                        order: [
-                            //根据created_at字段倒序排序
-                            ['created_at', 'desc']
-                        ]
-                    })
+                    if(ctx.query.status == 2) {
+                        var res = await Tags.findAll({
+                            where: { status: 2 },
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Tags.findAll({
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
@@ -259,14 +286,23 @@ export default ({ app, router, validator, Reply, code }) => {
                 )
 
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Tags.findAll({
-                        where: { status: 2 },
-                        order: [
-                            //根据created_at字段倒序排序
-                            ['created_at', 'desc']
-                        ]
-                    })
-
+                    if(ctx.query.status == 2) {
+                        var res = await Tags.findAll({
+                            where: { status: 2 },
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Tags.findAll({
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
@@ -302,13 +338,23 @@ export default ({ app, router, validator, Reply, code }) => {
                 )
 
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Tags.findAll({
-                        where: { status: 2 },
-                        order: [
-                            //根据created_at字段倒序排序
-                            ['created_at', 'desc']
-                        ]
-                    })
+                    if(ctx.query.status == 2) {
+                        var res = await Tags.findAll({
+                            where: { status: 2 },
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Tags.findAll({
+                            order: [
+                                //根据created_at字段倒序排序
+                                ['created_at', 'desc']
+                            ]
+                        })
+                    }
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
