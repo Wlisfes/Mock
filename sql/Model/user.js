@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:37:15
+ * @LastEditTime: 2019-06-09 14:27:38
  * @Description: 用户数据表
  */
 
@@ -27,6 +27,15 @@ const User = db.define('user', {
         comment: `
             allowNull: 不允许为null,
             type: int类型长度11  为登录账户&&手机号
+        `
+    },
+    admin: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'same',
+        comment: `
+            allowNull: 不允许为null,
+            type: STRING类型  管理员权限  same普通用户  admin超级用户
         `
     },
     password: {
@@ -82,13 +91,11 @@ const User = db.define('user', {
 })
 
 
-// User.sync({
-//     force: true
-// })
-
-User.sync()
-    .then(res => {
+User.sync({
+    // force: true
+}).then(res => {
     console.log('users表同步成功')
 })
+
 
 module.exports = User;

@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:08:34
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 01:08:11
+ * @LastEditTime: 2019-06-09 14:21:38
  * @Description: 配置文件
  */
 
@@ -25,7 +25,7 @@ export const SQLCOFN = {
 //session配置
 export const Token = {
     key: 'TOKEN',
-    maxAge: 60 * 60 * 60 * 1000,
+    maxAge: (24 * 60 * 60000),
     autoCommit: true,
     overwrite: true,
     httpOnly: true,
@@ -41,6 +41,7 @@ export const code = {
     LACK_ID: 201,        //参数缺失
     FAIL: 202,           //数据库查询为空 或已被占用
     NODLOG: 403,         //未登录
+    NOSTARE: 402,        //权限不足
     REEOR: 500,          //服务器发生错误，请检查服务器。
 
 

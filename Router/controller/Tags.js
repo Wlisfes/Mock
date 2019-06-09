@@ -2,12 +2,13 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 00:52:16
+ * @LastEditTime: 2019-06-09 19:21:11
  * @Description: 标签接口操作
  */
 
 
 import Tags from '../../sql/Model/tags'
+const Op = require('sequelize').Op
 
 export default ({ app, router, validator, Reply, code }) => {
     //添加
@@ -39,7 +40,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if (up !== null) {
                     Reply(ctx, { code: code.FAIL, message: '标签已存在！', data: up })
                 } else {
-                    let { name,color,description } = ctx.request.body
+                    let { name,color,description,weights } = ctx.request.body
                     let id = validator.MD5(new Date().getTime())
                     let res = await Tags.create({
                         id,
@@ -47,20 +48,21 @@ export default ({ app, router, validator, Reply, code }) => {
                         author: session.nickname,
                         name,
                         color,
-                        description
+                        description,
+                        weights: weights ? weights : 1
                     })
                     
                     if(res) {
                         let upres = await Tags.findAll({
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                         
                         Reply(ctx, { code: code.SUCCESS, message: 'ok', data: upres })
                     } else {
-                        Reply(ctx, { code: code.FAIL, message: '添加失败！' })
+                        Reply(ctx, { code: code.FAIL, message: '添加数据失败！' })
                     }
                 }
             } catch (error) {
@@ -72,11 +74,24 @@ export default ({ app, router, validator, Reply, code }) => {
     //根据id修改
     router.post('/update/tags',
         validator.isToken({ code ,Reply }),
+        validator.isAdmin({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
                     rule: validator.isRequire(),
                     message: "id 缺少！"
+                },
+                name: {
+                    rule: validator.string().isRequire(),
+                    message: "name 不能为空且必须为字符串"
+                },
+                color: {
+                    rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
+                    message: "color 不能为空且必须符合十六进制颜色"
+                },
+                description: {
+                    rule: validator.string().isRequire(),
+                    message: "description 不能为空切必须为字符串"
                 }
             },
             method: "POST",
@@ -85,24 +100,28 @@ export default ({ app, router, validator, Reply, code }) => {
         }),
         async(ctx) => {
             try {
-                let model = ctx.request.body
-                let up = await Tags.update(
-                        model,
-                    {
-                        where: { id: model.id }
-                    }
-                )
-                if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Tags.findAll({
-                        order: [
-                            //根据created_at字段倒序排序
-                            ['created_at', 'desc']
-                        ]
-                    })
+                let { id, name, color, description, weights } = ctx.request.body
+                let up = await Tags.findAll({ where: { name }})
+                if(up.length > 1) {
+                    Reply(ctx, { code: code.FAIL, message: '标签已存在！', data: up })
+                }
+                else {
+                    let upres = await Tags.update(
+                        { name,color,description,weights: weights?weights:1 },
+                        {where: { id }}
+                    )
+                    if(Array.isArray(upres) && upres[0] !== 0) {
+                        let res = await Tags.findAll({
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
 
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
-                } else {
-                    Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                        Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                    } else {
+                        Reply(ctx, { code: code.LACK_ID, message: 'id 错误' })
+                    }
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
@@ -115,8 +134,8 @@ export default ({ app, router, validator, Reply, code }) => {
         try {
             let res = await Tags.findAll({
                 order: [
-                    //根据created_at字段倒序排序
-                    ['created_at', 'desc']
+                    //根据权重排序
+                    ['weights', 'desc']
                 ]
             })
 
@@ -133,8 +152,8 @@ export default ({ app, router, validator, Reply, code }) => {
             let res = await Tags.findAll({
                 where: { status: 2 },
                 order: [
-                    //根据created_at字段倒序排序
-                    ['created_at', 'desc']
+                    //根据权重排序
+                    ['weights', 'desc']
                 ]
             })
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
@@ -150,8 +169,8 @@ export default ({ app, router, validator, Reply, code }) => {
             let res = await Tags.findAll({
                 where: { status: 1 },
                 order: [
-                    //根据created_at字段倒序排序
-                    ['created_at', 'desc']
+                    //根据权重排序
+                    ['weights', 'desc']
                 ]
             })
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
@@ -167,8 +186,8 @@ export default ({ app, router, validator, Reply, code }) => {
             let res = await Tags.findAll({
                 where: { status: 0 },
                 order: [
-                    //根据created_at字段倒序排序
-                    ['created_at', 'desc']
+                    //根据权重排序
+                    ['weights', 'desc']
                 ]
             })
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
@@ -209,9 +228,52 @@ export default ({ app, router, validator, Reply, code }) => {
     });
 
 
+    //条件查询
+    router.post('/find/tags',
+        async(ctx) => {
+            try {
+                let query = ctx.request.body
+                if(query.first && query.last) {
+                    let w = {}
+                    for(let k in query) {
+                        if(k != 'first' && k != 'last') {
+                            w[k] = query[k]
+                        }
+                    }
+                    w.createdAt = {
+                        [Op.gte]: `${query.first} 00:00:00`,
+                        [Op.lte]: `${query.last} 23:59:59`
+                    }
+
+                    var res = await Tags.findAll({
+                        raw: true,
+                        where: w,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+                else {
+                    var res = await Tags.findAll({
+                        where: query,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error })
+            }
+    })
+
     //开放
     router.get('/open/tags',
         validator.isToken({ code ,Reply }),
+        validator.isAdmin({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -238,16 +300,16 @@ export default ({ app, router, validator, Reply, code }) => {
                         var res = await Tags.findAll({
                             where: { status: 2 },
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }
                     else {
                         var res = await Tags.findAll({
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }
@@ -264,6 +326,7 @@ export default ({ app, router, validator, Reply, code }) => {
     //关闭
     router.get('/down/tags',
         validator.isToken({ code ,Reply }),
+        validator.isAdmin({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -290,16 +353,16 @@ export default ({ app, router, validator, Reply, code }) => {
                         var res = await Tags.findAll({
                             where: { status: 2 },
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }
                     else {
                         var res = await Tags.findAll({
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }
@@ -316,6 +379,7 @@ export default ({ app, router, validator, Reply, code }) => {
     //删除
     router.get('/del/tags',
         validator.isToken({ code ,Reply }),
+        validator.isAdmin({ code ,Reply }),
         validator.isPrams({
             key: {
                 id: {
@@ -342,16 +406,16 @@ export default ({ app, router, validator, Reply, code }) => {
                         var res = await Tags.findAll({
                             where: { status: 2 },
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }
                     else {
                         var res = await Tags.findAll({
                             order: [
-                                //根据created_at字段倒序排序
-                                ['created_at', 'desc']
+                                //根据权重排序
+                                ['weights', 'desc']
                             ]
                         })
                     }

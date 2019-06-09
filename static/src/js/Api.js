@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-05 17:50:09
+ * @LastEditTime: 2019-06-09 15:19:21
  * @Description: 
  */
 
@@ -30,6 +30,7 @@ class HttpApi {
                 password: "000000",
                 nickname: "情雨随风",
                 sex: 2,
+                admin: 'same',
                 description: "项目开发者, 超级管理员！"
             })
             console.log(res)
@@ -49,7 +50,7 @@ class HttpApi {
     async loginUser() {
         try {
             let res = await this.post(`/login/user`,{
-                phone: 18888888888,
+                phone: 18676361342,
                 password: "000000"
             })
             console.log(res)

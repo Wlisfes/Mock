@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 01:09:47
+ * @LastEditTime: 2019-06-09 14:34:11
  * @Description: 用户接口操作
  */
 
@@ -13,6 +13,7 @@ export default ({ app, router, validator, Reply, code }) => {
     
     //注册用户
     router.post('/post/user',
+        validator.isAdmin({ code ,Reply }),
         validator.isPrams({
             key: {
                 phone: {
@@ -49,7 +50,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if (up !== null) {
                     Reply(ctx, { code: code.FAIL, message: '手机号已被注册！' })
                 } else {
-                    let { phone,password,nickname,sex,description,avatar } = ctx.request.body
+                    let { phone,password,nickname,sex,description,avatar,admin } = ctx.request.body
                     let uid = validator.MD5(new Date().getTime())
                     let res = await User.create({
                         uid,
@@ -58,6 +59,7 @@ export default ({ app, router, validator, Reply, code }) => {
                         nickname,
                         sex,
                         description,
+                        admin: admin ? admin : 'same',
                         avatar: "1557678889694.jpg"
                         // () => (avatar ? avatar : sex === 0 ? "1557678889694.jpg" : "1557678889694.jpg")
                     })

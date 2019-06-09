@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:44:46
+ * @LastEditTime: 2019-06-09 10:33:14
  * @Description: 标签数据表
  */
 
@@ -68,6 +68,13 @@ const Tags = db.define("tags", {
             type: int类型  标签创建作者id
         `
     },
+    weights: {
+        type: Sequelize.BIGINT(2),
+        defaultValue: 1,
+        comment: `
+            type: BIGINT类型  权重  默认为1
+        `
+    },
     createdAt: {
 		type: Sequelize.DATE,
 		field: 'created_at',
@@ -86,11 +93,10 @@ const Tags = db.define("tags", {
 })
 
 
-// Tags.sync({
-//     force: true
-// })
-Tags.sync()
-    .then(res => {
+Tags.sync({
+    // force: true
+}).then(res => {
     console.log('tags表同步成功！')
 })
+
 module.exports = Tags;
