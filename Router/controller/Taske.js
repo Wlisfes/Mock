@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-06 23:39:35
+ * @LastEditTime: 2019-06-09 23:44:40
  * @Description: 项目接口操作
  */
 
@@ -65,7 +65,7 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let session = ctx.session[code.TOKEN]
-                let { name,description,github,viewUrl,tags } = ctx.request.body
+                let { name,description,github,viewUrl,tags,weights } = ctx.request.body
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
@@ -76,7 +76,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     }
                 })
 
-                let res = await Taske.create({
+                await Taske.create({
                     id,
                     uid: session.uid,
                     author: session.nickname,
@@ -84,18 +84,25 @@ export default ({ app, router, validator, Reply, code }) => {
                     name,
                     description,
                     status: 1,
+                    weights: weights ? weights : 1,
                     suki: 0,
                     github,
                     viewUrl
                 })
 
-                let tagsval = await TaskeTags.bulkCreate(tagsModel)
-                let data = (() => {
-                    let el = res.get()
-                    el.tags = tagsval
+                await TaskeTags.bulkCreate(tagsModel)
+                let res = await Taske.findAll({
+                    raw: true,
+                    order: [
+                        //根据权重排序
+                        ['weights', 'desc']
+                    ]
+                })
+                let tagsval = await TaskeTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tagsval.filter(e => el.id === e.tag_id)
                     return el
-                })()
-
+                })
                 Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
@@ -107,11 +114,13 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/taske', async(ctx) => {
         try {
             let res = await Taske.findAll({ raw: true })
-            let tag = await TaskeTags.findAll({ raw: true })
-
-            
-
-            Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+            let tagsval = await TaskeTags.findAll({ raw: true })
+            let data = res.map(el => {
+                el.tags = tagsval.filter(e => el.id === e.tag_id)
+                return el
+            })
+        
+            Reply(ctx, { code: code.SUCCESS, message: 'ok', data})
         } catch (error) {
             Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
         }

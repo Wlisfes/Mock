@@ -60,10 +60,10 @@
         <el-button type="primary" :style="Style" @click="idArticle">查找id文章</el-button>
         <el-button type="primary" :style="Style" @click="sukiArticle">点赞文章</el-button>
         <el-button type="primary" :style="Style" @click="postTaske">新增项目</el-button>
-
+        <el-button type="primary" :style="Style" @click="AllTaske">获取全部项目</el-button>
         
 
-
+        
 
     </div>
     
@@ -159,6 +159,9 @@
                 },
                 postTaske() {
                     Api.postTaske()
+                },
+                AllTaske() {
+                    Api.AllTaske()
                 }
 
 

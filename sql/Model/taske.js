@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:35:49
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:37:05
+ * @LastEditTime: 2019-06-09 23:46:01
  * @Description: 项目数据表
  */
 
@@ -69,6 +69,13 @@ const Taske = db.define("taske",{
             type: int类型长度为1  0-删除  1-关闭 2-开放
         `
     },
+    weights: {
+        type: Sequelize.BIGINT(2),
+        defaultValue: 1,
+        comment: `
+            type: BIGINT类型  权重  默认为1
+        `
+    },
     suki: {
         type: Sequelize.BIGINT,
         defaultValue: 0,
@@ -98,11 +105,10 @@ const Taske = db.define("taske",{
     freezeTableName: true,
 })
 
-// Taske.sync({
-//     force: true
-// })
-Taske.sync()
-    .then(res => {
+
+Taske.sync({
+    // force: true
+}).then(res => {
     console.log('taske表同步成功')
 })
 

@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 19:21:11
+ * @LastEditTime: 2019-06-09 22:06:23
  * @Description: 标签接口操作
  */
 
@@ -54,6 +54,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     
                     if(res) {
                         let upres = await Tags.findAll({
+                            raw: true,
                             order: [
                                 //根据权重排序
                                 ['weights', 'desc']
@@ -112,6 +113,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     )
                     if(Array.isArray(upres) && upres[0] !== 0) {
                         let res = await Tags.findAll({
+                            raw: true,
                             order: [
                                 //根据权重排序
                                 ['weights', 'desc']
@@ -133,6 +135,7 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/tags', async(ctx) => {
         try {
             let res = await Tags.findAll({
+                raw: true,
                 order: [
                     //根据权重排序
                     ['weights', 'desc']
@@ -150,6 +153,7 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/open/tags', async(ctx) => {
         try {
             let res = await Tags.findAll({
+                raw: true,
                 where: { status: 2 },
                 order: [
                     //根据权重排序
@@ -167,6 +171,7 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/down/tags', async(ctx) => {
         try {
             let res = await Tags.findAll({
+                raw: true,
                 where: { status: 1 },
                 order: [
                     //根据权重排序
@@ -184,6 +189,7 @@ export default ({ app, router, validator, Reply, code }) => {
     router.get('/all/del/tags', async(ctx) => {
         try {
             let res = await Tags.findAll({
+                raw: true,
                 where: { status: 0 },
                 order: [
                     //根据权重排序
@@ -256,6 +262,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 }
                 else {
                     var res = await Tags.findAll({
+                        raw: true,
                         where: query,
                         order: [
                             //根据权重排序
@@ -298,6 +305,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if(Array.isArray(up) && up[0] !== 0) {
                     if(ctx.query.status == 2) {
                         var res = await Tags.findAll({
+                            raw: true,
                             where: { status: 2 },
                             order: [
                                 //根据权重排序
@@ -351,6 +359,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if(Array.isArray(up) && up[0] !== 0) {
                     if(ctx.query.status == 2) {
                         var res = await Tags.findAll({
+                            raw: true,
                             where: { status: 2 },
                             order: [
                                 //根据权重排序
@@ -404,6 +413,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if(Array.isArray(up) && up[0] !== 0) {
                     if(ctx.query.status == 2) {
                         var res = await Tags.findAll({
+                            raw: true,
                             where: { status: 2 },
                             order: [
                                 //根据权重排序

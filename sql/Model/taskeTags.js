@@ -2,7 +2,7 @@
  * @Date: 2019-06-04 15:27:58
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:37:11
+ * @LastEditTime: 2019-06-09 23:46:17
  * @Description: 项目标签子表
  */
 
@@ -60,14 +60,13 @@ const TaskeTags = db.define('taske_tags', {
 })
 
 
-// TaskeTags.sync({
-//     force: true
-// })
-
-TaskeTags.sync()
-    .then(res => {
+TaskeTags.sync({
+    // force: true
+}).then(res => {
     console.log('taske_tags表同步成功')
 })
+
+    
 
 module.exports = TaskeTags;
 

@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 15:19:21
+ * @LastEditTime: 2019-06-09 23:26:23
  * @Description: 
  */
 
@@ -500,16 +500,17 @@ class HttpApi {
 
     //新增项目
     async postTaske() {
-        try {
+        try {0
             let res = await this.post(`/post/taske`, {
                 name: "VueAdmin",
                 description: "使用Vue、ant-design-vue构建的后台管理系统。",
                 github: "https://github.com/Wlisfes/AntAdmin",
                 viewUrl: "http://ant.lisfes.cn",
+                weights: 3,
                 tags: [
-                    { name: 'React', color: '#333333' },
-                    { name: 'Vue', color: '#2C93C5'},
-                    { name: 'Koa', color: '#2C93C5'}
+                    { name: 'React', color: '#333333', id: '6093972fd8f256630ecd52807ef1670b' },
+                    { name: 'Vue', color: '#2C93C5', id: '6093972fd8f256630ecd52807ef1670b' },
+                    { name: 'Koa', color: '#2C93C5', id: '6093972fd8f256630ecd52807ef1670b' }
                 ]
             })
             console.log(res)
@@ -525,7 +526,22 @@ class HttpApi {
         }
     }
 
-
+    //获取所有项目
+    async AllTaske() {
+        try {
+            let res = await this.get(`/all/taske`)
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
 
 }
 
