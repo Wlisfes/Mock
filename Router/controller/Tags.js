@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 22:06:23
+ * @LastEditTime: 2019-06-10 23:04:27
  * @Description: 标签接口操作
  */
 
@@ -315,6 +315,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     }
                     else {
                         var res = await Tags.findAll({
+                            raw: true,
                             order: [
                                 //根据权重排序
                                 ['weights', 'desc']
