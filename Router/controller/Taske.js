@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-11 17:34:11
+ * @LastEditTime: 2019-06-11 22:54:31
  * @Description: 项目接口操作
  */
 
@@ -361,10 +361,109 @@ export default ({ app, router, validator, Reply, code }) => {
     router.post('/update/taske',
         validator.isToken({ code ,Reply }),
         validator.isAdmin({ code ,Reply }),
+        validator.isArr({
+            key: {
+                keys: "tags",
+                rule: validator.array().isRequire(),
+                message: "tags 不符合规则，必须Array类型且不能为空！",
+            },
+            child: {
+                name: {
+                    rule: validator.string().isRequire(),
+                    message: "tags is name 不符合规则！"
+                },
+                color: {
+                    rule: validator.test(/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/).isRequire(),
+                    message: "tags is color 不符合规则！"
+                },
+                id: {
+                    rule: validator.string().isRequire(),
+                    message: "tags is id 不符合规则！"
+                }
+            },
+            method: "POST",
+            code,
+            Reply,
+        }),
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.string().isRequire(),
+                    message: "id 不能为空且必须为字符串！"
+                },
+                name: {
+                    rule: validator.string().isRequire(),
+                    message: "name 不能为空且必须为字符串！"
+                },
+                description: {
+                    rule: validator.string().isRequire(),
+                    message: "description 不能为空且必须为字符串！"
+                },
+                github: {
+                    rule: validator.string().isRequire(),
+                    message: "github 不能为空且必须为字符串！"
+                },
+                viewUrl: {
+                    rule: validator.string().isRequire(),
+                    message: "viewUrl 不能为空且必须为字符！"
+                },
+                weights: {
+                    rule: validator.number().isRequire(),
+                    message: "weights 不能为空且必须为数字！"
+                }
+            },
+            method: "POST",
+            code,
+            Reply
+        }),
         async(ctx) => {
             try {
-                
+                let { id,name,description,github,viewUrl,weights,tags } = ctx.request.body
+
+                //根据id跟新数据库
+                let upres = await Taske.update(
+                    { name,description,github,viewUrl,weights },
+                    {where: { id }}
+                )
+
+                if(Array.isArray(upres) && upres[0] !== 0) {
+                    //筛选项目标签
+                    let tagsval = await TaskeTags.findAll({ raw: true })
+                    let tg = tagsval.filter(ele => ele.tag_id === id)
+                    
+                    //查看修改后的标签与修改前的标签是否一致
+                    if(!(tg.length === tags.length && tags.every(item => tg.some(ele => item.id === ele.tagsfirst_id)))) {
+                        //标签有变化 这里使用方便点的方法  直接删除原有标签在重新插入标签
+                        await TaskeTags.destroy({
+                            where: {
+                                tag_id: id
+                            }
+                        })
+                        let tagsModel = tags.map(el => ({
+                                tag_id: id,
+                                tagsfirst_id: el.id,
+                                name: el.name,
+                                color: el.color
+                            }))
+                        //使用destroy方法批量删除后重新插入新的标签
+                        await TaskeTags.bulkCreate(tagsModel)
+
+                        //完成标签更新之后继续往下执行
+                    }
+
+                    let res = await Taske.findAll({ raw: true })
+                    let ts = await TaskeTags.findAll({ raw: true })
+                    let data = res.map(el => {
+                        el.tags = ts.filter(e => el.id === e.tag_id)
+                        return el
+                    })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.FAIL, message: '修改失败！', err: error })
+                }
             } catch (error) {
+                console.log(error)
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
             }
     })
