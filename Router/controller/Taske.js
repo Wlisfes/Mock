@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-10 23:55:22
+ * @LastEditTime: 2019-06-11 17:34:11
  * @Description: 项目接口操作
  */
 
@@ -357,6 +357,17 @@ export default ({ app, router, validator, Reply, code }) => {
     })
 
 
+    //根据id修改
+    router.post('/update/taske',
+        validator.isToken({ code ,Reply }),
+        validator.isAdmin({ code ,Reply }),
+        async(ctx) => {
+            try {
+                
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+            }
+    })
 
     app.use(router.routes(), router.allowedMethods())
 }
