@@ -25,13 +25,14 @@ app.use(views(__dirname + '/static/src/page', {
         html: 'nunjucks'
     }
 }))
+
 app.keys = ["lisfes-sigin"]
 app.use(session(Token, app))
 app.use(bodyparser({
     enableTypes:['json', 'form', 'text']
 }))
 
-new Router(app).Init()
+new Router(app, __dirname + '/static/assets').Init()
 
 
 const port = process.env.PORT || 9800
