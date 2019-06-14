@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-11 23:53:35
+ * @LastEditTime: 2019-06-14 23:30:36
  * @Description: 用户接口操作
  */
 
@@ -32,9 +32,21 @@ export default ({ app, router, validator, Reply, code }) => {
                     rule: validator.number().isRequire(),
                     message: "sex 错误"
                 },
+                age: {
+                    rule: validator.number().isRequire(),
+                    message: "age 错误"
+                },
                 description: {
                     rule: validator.string().isRequire(),
                     message: "description 错误"
+                },
+                admin: {
+                    rule: validator.string().isRequire(),
+                    message: "admin 错误"
+                },
+                avatar: {
+                    rule: validator.string().isRequire(),
+                    message: "avatar 错误"
                 }
             },
             method: "POST",
@@ -50,7 +62,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 if (up !== null) {
                     Reply(ctx, { code: code.FAIL, message: '手机号已被注册！' })
                 } else {
-                    let { phone,password,nickname,sex,description,avatar,admin } = ctx.request.body
+                    let { phone,password,nickname,sex,age,description,avatar,admin } = ctx.request.body
                     let uid = validator.MD5(new Date().getTime())
                     let res = await User.create({
                         uid,
@@ -58,14 +70,12 @@ export default ({ app, router, validator, Reply, code }) => {
                         password,
                         nickname,
                         sex,
+                        age,
                         description,
-                        admin: admin ? admin : 'same',
-                        avatar: "1557678889694.jpg"
-                        // () => (avatar ? avatar : sex === 0 ? "1557678889694.jpg" : "1557678889694.jpg")
+                        admin: admin || 'same',
+                        avatar: avatar
                     })
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
-
-                    // Reply(ctx, { code: code.SUCCESS, message: 'ok' })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok' , data: res })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '注册失败！', err: error })

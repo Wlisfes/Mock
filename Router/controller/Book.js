@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:18:39
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-13 00:30:06
+ * @LastEditTime: 2019-06-14 22:58:01
  * @Description: 笔记接口操作
  */
 
@@ -393,6 +393,10 @@ export default ({ app, router, validator, Reply, code }) => {
                     rule: validator.string().isRequire(),
                     message: "Text 不能为空且必须为字符串！"
                 },
+                Textvalue: {
+                    rule: validator.string().isRequire(),
+                    message: "Textvalue 不能为空且必须为字符串！"
+                },
                 theme: {
                     rule: validator.string().isRequire(),
                     message: "theme 不能为空且必须为字符！"
@@ -408,11 +412,11 @@ export default ({ app, router, validator, Reply, code }) => {
         }),
         async(ctx) => {
             try {
-                let { id,name,description,Text,theme,weights,tags } = ctx.request.body
+                let { id,name,description,Text,Textvalue,theme,weights,tags } = ctx.request.body
 
                 //根据id跟新数据库
                 let upres = await Book.update(
-                    { name,description,Text,theme,weights },
+                    { name,description,Text,Textvalue,theme,weights },
                     {where: { id }}
                 )
 

@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-13 23:44:39
+ * @LastEditTime: 2019-06-14 23:03:26
  * @Description: Router实例
  */
 
@@ -25,10 +25,11 @@ class Router {
     }
 
     Index() {
-        this.app.use(async (ctx, next) => {
+        this.router.get('/', async (ctx, next) => {
             await ctx.render('index.html')
             await next()
         })
+        this.app.use(this.router.routes(), this.router.allowedMethods())
     }
 
     Init() {
@@ -39,7 +40,7 @@ class Router {
         Article(ctx)
         Taske(ctx)
         Book(ctx)
-        // this.Index()
+        this.Index()
     }
 
     ctx() {

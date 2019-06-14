@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 23:26:23
+ * @LastEditTime: 2019-06-14 23:30:06
  * @Description: 
  */
 
@@ -26,12 +26,14 @@ class HttpApi {
     async postUser() {
         try {
             let res = await this.post(`/post/user`,{
-                phone: 18888888888,
+                phone: 18676361342,
                 password: "000000",
                 nickname: "情雨随风",
                 sex: 2,
-                admin: 'same',
-                description: "项目开发者, 超级管理员！"
+                age: 18,
+                admin: 'admin',
+                description: "项目开发者, 超级管理员！",
+                avatar: "/assets/album/598cc998f3e7b.png"
             })
             console.log(res)
             if(res.code === 200) 

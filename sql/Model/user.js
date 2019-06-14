@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 15:34:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-09 14:27:38
+ * @LastEditTime: 2019-06-14 23:32:39
  * @Description: 用户数据表
  */
 
@@ -75,7 +75,15 @@ const User = db.define('user', {
         defaultValue: 1,
         comment: `
             defaultValue: 默认1
-            type: int类型长度为1  1-女  2-男
+            type: BIGINT类型长度为1  1-女  2-男
+        `
+    },
+    age: {
+        type: Sequelize.BIGINT,
+        defaultValue: 18,
+        comment: `
+            defaultValue: 默认18
+            type: BIGINT类型 用户年龄
         `
     },
     status: {
