@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:10:02
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-13 00:29:31
+ * @LastEditTime: 2019-06-14 09:59:12
  * @Description: 笔记数据表
  */
 
@@ -105,7 +105,7 @@ const Book = db.define("book",{
 
 
 Book.sync({
-    force: true
+    // force: true
 }).then(res => {
     console.log('book表同步成功')
 })
