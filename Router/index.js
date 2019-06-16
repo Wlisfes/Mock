@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:04:20
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-14 23:03:26
+ * @LastEditTime: 2019-06-16 21:42:24
  * @Description: Router实例
  */
 
@@ -16,6 +16,7 @@ import User from './controller/User'
 import Article from './controller/Article'
 import Taske from './controller/Taske'
 import Book from './controller/Book'
+import GitHub from './controller/GitHub'
 
 class Router {
     constructor(app, path) {
@@ -40,6 +41,7 @@ class Router {
         Article(ctx)
         Taske(ctx)
         Book(ctx)
+        GitHub(ctx)
         this.Index()
     }
 

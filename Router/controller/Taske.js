@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-11 22:54:31
+ * @LastEditTime: 2019-06-16 23:11:13
  * @Description: 项目接口操作
  */
 
@@ -238,7 +238,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
-                Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+                Reply(ctx, { code: code.REEOR, message: '发布失败！', err: error })
             }
     })
 
@@ -295,7 +295,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
-                Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+                Reply(ctx, { code: code.REEOR, message: '关闭失败！', err: error })
             }
     })
 
@@ -352,7 +352,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
             } catch (error) {
-                Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+                Reply(ctx, { code: code.REEOR, message: '删除失败！', err: error })
             }
     })
 
@@ -451,7 +451,13 @@ export default ({ app, router, validator, Reply, code }) => {
                         //完成标签更新之后继续往下执行
                     }
 
-                    let res = await Taske.findAll({ raw: true })
+                    var res = await Taske.findAll({
+                        raw: true,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
                     let ts = await TaskeTags.findAll({ raw: true })
                     let data = res.map(el => {
                         el.tags = ts.filter(e => el.id === e.tag_id)
@@ -463,7 +469,6 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.FAIL, message: '修改失败！', err: error })
                 }
             } catch (error) {
-                console.log(error)
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
             }
     })

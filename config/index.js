@@ -2,16 +2,20 @@
  * @Date: 2019-05-29 15:08:34
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-15 13:32:45
+ * @LastEditTime: 2019-06-16 23:54:21
  * @Description: 配置文件
  */
 
 //数据库配置
 export const SQLCOFN = {
-    DATABASE: "mock",                   //数据库名称
-    DATABASE_NAME: "mock",              //数据库连接名称
+    //DATABASE: "mocks",                   //数据库名称
+    DATABASE: "mock",
+    DATABASE_NAME: "mock",               //数据库连接名称
+    //DATABASE_NAME: "mocks",              
     DATABASE_PASSWORD: "77243",          //数据库连接密码
-    HOST: "47.106.97.205",             //数据库地址
+    //HOST: "47.106.97.205",               //数据库地址
+    //HOST: "111.231.222.196",
+    HOST: "localhost",
     DIALECT: "mysql",                    //数据库类型
     POOL: {                              //连接池配置
         max: 5,                          //最大连接数
