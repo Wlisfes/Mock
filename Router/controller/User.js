@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-15 12:58:17
+ * @LastEditTime: 2019-06-17 23:18:54
  * @Description: 用户接口操作
  */
 
@@ -67,7 +67,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     let res = await User.create({
                         uid,
                         phone,
-                        password,
+                        password: validator.MD5(password),
                         nickname,
                         sex,
                         age,
@@ -127,7 +127,7 @@ export default ({ app, router, validator, Reply, code }) => {
                 })
                 if (up !== null) {
                     if(up.status === 2) {
-                        if(up.password === ctx.request.body.password) {
+                        if(up.password === validator.MD5(ctx.request.body.password)) {
                             validator.setStore( ctx, code.TOKEN, up)
                             Reply(ctx, { code: code.SUCCESS, message: 'ok', data: up })
                         } else {
@@ -141,7 +141,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.FAIL, message: '手机号未注册！' })
                 }
             } catch (error) {
-                Reply(ctx, { code: code.REEOR, message: '登陆失败！', err: error })
+                Reply(ctx, { code: code.REEOR, message: '登陆失败！', err: error.toString() })
             }
     })
 
@@ -178,7 +178,7 @@ export default ({ app, router, validator, Reply, code }) => {
 
                 if(up !== null) {
                     let upRes = await User.update(
-                        { password: ctx.request.body.password },
+                        { password: validator.MD5(ctx.request.body.password) },
                         {
                             where: { phone: ctx.request.body.phone }
                         }
@@ -256,10 +256,6 @@ export default ({ app, router, validator, Reply, code }) => {
                     rule: validator.string().isRequire(),
                     message: "uid 错误"
                 },
-                password: {
-                    rule: validator.string().isRequire(),
-                    message: "password 不能为空且不能是纯数字"
-                },
                 nickname: {
                     rule: validator.string().isRequire(),
                     message: "nickname 错误"
@@ -287,31 +283,24 @@ export default ({ app, router, validator, Reply, code }) => {
         }),
         async(ctx) => {
             try {
-                let { password,nickname,sex,age,description,uid,admin } = ctx.request.body
+                let { nickname,sex,age,description,uid,admin } = ctx.request.body
                 let up = await User.findOne({ where: { uid } })
 
                 if (up == null) {
                     Reply(ctx, { code: code.FAIL, message: 'uid错误，无法查找用户信息！' })
                 }
                 else {
-                    // let upres = await User.findOne({ where: { phone } })
+                    let update = await User.update(
+                        { nickname,sex,age,description,admin },
+                        { where: { uid } })
 
-                    // if (upres !== null) {
-                    //     Reply(ctx, { code: code.FAIL, message: '手机号已被注册！' })
-                    // }
-                    // else {
-                        let update = await User.update(
-                            { password,nickname,sex,age,description,admin },
-                            { where: { uid } })
-
-                        if(Array.isArray(update) && update[0] !== 0) {
-                            let res = await User.findAll({ raw: true })
-                            Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
-                        }
-                        else {
-                            Reply(ctx, { code: code.FAIL, message: '修改失败！' })
-                        }
-                    // }
+                    if(Array.isArray(update) && update[0] !== 0) {
+                        let res = await User.findAll({ raw: true })
+                        Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                    }
+                    else {
+                        Reply(ctx, { code: code.FAIL, message: '修改失败！' })
+                    }
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
