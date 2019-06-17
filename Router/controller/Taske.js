@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-16 23:11:13
+ * @LastEditTime: 2019-06-17 23:34:42
  * @Description: 项目接口操作
  */
 
@@ -136,7 +136,6 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //条件查询
     router.post('/find/taske',
-        validator.isToken({ code ,Reply }),
         async(ctx) => {
             try {
                 let query = ctx.request.body
@@ -180,7 +179,6 @@ export default ({ app, router, validator, Reply, code }) => {
 
                 Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
             } catch (error) {
-                console.log(error)
                 Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error })
             }
     })

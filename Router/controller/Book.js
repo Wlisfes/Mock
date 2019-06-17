@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:18:39
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-14 22:58:01
+ * @LastEditTime: 2019-06-17 23:34:19
  * @Description: 笔记接口操作
  */
 
@@ -126,7 +126,6 @@ export default ({ app, router, validator, Reply, code }) => {
 
     //条件查询
     router.post('/find/book',
-        validator.isToken({ code ,Reply }),
         async(ctx) => {
             try {
                 let query = ctx.request.body

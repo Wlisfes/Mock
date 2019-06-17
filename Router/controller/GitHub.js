@@ -2,12 +2,13 @@
  * @Author: 情雨随风
  * @Date: 2019-06-16 21:34:12
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-16 23:51:26
+ * @LastEditTime: 2019-06-17 23:41:29
  * @Description: 友链接口操作
  */
 
 
 import GitHub from '../../sql/Model/github'
+const Op = require('sequelize').Op
 
 export default ({ app, router, validator, Reply, code }) => {
 
@@ -333,6 +334,50 @@ export default ({ app, router, validator, Reply, code }) => {
             } catch (error) {
                 console.log(error)
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error.toString() })
+            }
+    })
+
+
+    //条件查找
+    router.post('/find/github',
+        async(ctx) => {
+            try {
+                let query = ctx.request.body
+                if(query.first && query.last) {
+                    let w = {}
+                    for(let k in query) {
+                        if(k != 'first' && k != 'last') {
+                            w[k] = query[k]
+                        }
+                    }
+                    w.createdAt = {
+                        [Op.gte]: `${query.first} 00:00:00`,
+                        [Op.lte]: `${query.last} 23:59:59`
+                    }
+
+                    var res = await GitHub.findAll({
+                        raw: true,
+                        where: w,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+                else {
+                    var res = await GitHub.findAll({
+                        raw: true,
+                        where: query,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
             }
     })
 
