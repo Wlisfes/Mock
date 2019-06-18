@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 18:15:18
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:36:56
+ * @LastEditTime: 2019-06-19 00:18:14
  * @Description: 文章标签子表
  */
 
@@ -59,12 +59,9 @@ const ArticleTags = db.define('article_tags', {
 })
 
 
-// ArticleTags.sync({
-//     force: true
-// })
-
-ArticleTags.sync()
-    .then(res => {
+ArticleTags.sync({
+    // force: true
+}).then(res => {
     console.log('article_tags表同步成功')
 })
 

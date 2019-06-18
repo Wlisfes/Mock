@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 15:56:14
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:36:51
+ * @LastEditTime: 2019-06-19 00:24:13
  * @Description: 文章数据表
  */
 
@@ -50,15 +50,26 @@ const Article = db.define("article", {
         allowNull: false,
         comment: `
             allowNull: false
-            type: string类型  标签描述
+            type: string类型  文章描述
         `
     },
-    context: {
-        type: Sequelize.TEXT,
-        allowNull: false,
+    theme: {
+        type: Sequelize.STRING,
+        defaultValue: 'OneDark',
         comment: `
-            allowNull: false
-            type: string类型  文章内容
+            type: STRING类型  代码色调
+        `
+    },
+    Text: {
+        type: Sequelize.TEXT,
+        comment: `
+            type: TEXT类型  文章编辑文本
+        `
+    },
+    Textvalue: {
+        type: Sequelize.TEXT,
+        comment: `
+            type: TEXT类型  文章编辑文本
         `
     },
     picture: {
@@ -79,18 +90,17 @@ const Article = db.define("article", {
     },
     suki: {
         type: Sequelize.BIGINT,
-        defaultValue: 0,
+        defaultValue: 1,
         comment: `
             defaultValue: 默认1
             type: int类型  文章点赞数
         `
     },
-    keep: {
-        type: Sequelize.BIGINT,
-        defaultValue: 0,
+    weights: {
+        type: Sequelize.BIGINT(2),
+        defaultValue: 1,
         comment: `
-            defaultValue: 默认1
-            type: int类型  文章收藏数
+            type: BIGINT类型  权重  默认为1
         `
     },
     status: {
@@ -108,12 +118,9 @@ const Article = db.define("article", {
 })
 
 
-// Article.sync({
-//     force: true
-// })
-
-Article.sync()
-    .then(res => {
+Article.sync({
+    // force: true
+}).then(res => {
     console.log('article表同步成功')
 })
 

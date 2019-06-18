@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-04 15:31:07
+ * @LastEditTime: 2019-06-19 00:22:36
  * @Description: 文章接口操作
  */
 
@@ -47,13 +47,17 @@ export default ({ app, router, validator, Reply, code }) => {
                     rule: validator.string().isRequire(),
                     message: "description 不能为空且必须为字符串！"
                 },
-                context: {
-                    rule: validator.string().isRequire(),
-                    message: "context 不能为空且必须为字符串！"
-                },
                 picture: {
                     rule: validator.string().isRequire(),
-                    message: "picture 不能为空且必须为字符！"
+                    message: "picture 不能为空且必须为字符串！"
+                },
+                Textvalue: {
+                    rule: validator.string().isRequire(),
+                    message: "Textvalue 不能为空且必须为字符！"
+                },
+                Text: {
+                    rule: validator.string().isRequire(),
+                    message: "Text 不能为空且必须为字符！"
                 }
             },
             method: "POST",
@@ -63,7 +67,7 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let session = ctx.session[code.TOKEN]
-                let { title,description,context,picture,tags } = ctx.request.body
+                let { title,description,read,suki,picture,tags,theme,Text,Textvalue } = ctx.request.body
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
@@ -73,22 +77,28 @@ export default ({ app, router, validator, Reply, code }) => {
                         color: el.color
                     }
                 })
-                let res = await Article.create({
+                await Article.create({
                     id,
                     uid: session.uid,
                     title,
                     author: session.nickname,
                     description,
-                    context,
+                    theme: theme || "OneDark",
+                    Text,
+                    Textvalue,
                     picture,
+                    read,
+                    suki,
+                    status: 1
                 })
-                let tagsval = await ArticleTags.bulkCreate(tagsModel)
+                await ArticleTags.bulkCreate(tagsModel)
 
-                let data = (() => {
-                    let el = res.get()
-                    el.tags = tagsval
+                let res = await Article.findAll({ raw: true, order: [ ['weights', 'desc'] ] })
+                let tagsval = await ArticleTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tagsval.filter(e => el.id === e.tag_id)
                     return el
-                })()
+                })
 
                 Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
             } catch (error) {
