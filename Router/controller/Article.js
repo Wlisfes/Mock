@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-19 00:22:36
+ * @LastEditTime: 2019-06-19 13:19:57
  * @Description: 文章接口操作
  */
 
@@ -67,7 +67,7 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let session = ctx.session[code.TOKEN]
-                let { title,description,read,suki,picture,tags,theme,Text,Textvalue } = ctx.request.body
+                let { title,description,read,suki,picture,tags,theme,Text,Textvalue,weights } = ctx.request.body
                 let id = validator.MD5(new Date().getTime())
                 let tagsModel = tags.map(el => {
                     return {
@@ -89,6 +89,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     picture,
                     read,
                     suki,
+                    weights: weights || 1,
                     status: 1
                 })
                 await ArticleTags.bulkCreate(tagsModel)
@@ -109,7 +110,7 @@ export default ({ app, router, validator, Reply, code }) => {
     //获取全部
     router.get('/all/article', async(ctx) => {
         try {
-            let res = await Article.findAll({ raw: true })
+            let res = await Article.findAll({ raw: true, order: [ ['weights', 'desc'] ] })
             let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
                 el.tags = tag.filter(e => el.id === e.tag_id)
@@ -129,10 +130,11 @@ export default ({ app, router, validator, Reply, code }) => {
                 raw: true,
                 where: { status: 2 },
                 order: [
-                    //根据createdAt字段倒序排序
-                    ['createdAt', 'desc']
+                    //根据weights字段倒序排序
+                    ['weights', 'desc']
                 ]
             })
+
             let tag = await ArticleTags.findAll({ raw: true })
             let data = res.map(el => {
                 el.tags = tag.filter(e => el.id === e.tag_id)
@@ -152,8 +154,8 @@ export default ({ app, router, validator, Reply, code }) => {
                 raw: true,
                 where: { status: 1 },
                 order: [
-                    //根据createdAt字段倒序排序
-                    ['createdAt', 'desc']
+                    //根据weights字段倒序排序
+                    ['weights', 'desc']
                 ]
             })
             let tag = await ArticleTags.findAll({ raw: true })
@@ -175,8 +177,8 @@ export default ({ app, router, validator, Reply, code }) => {
                 raw: true,
                 where: { status: 0 },
                 order: [
-                    //根据createdAt字段倒序排序
-                    ['createdAt', 'desc']
+                    //根据weights字段倒序排序
+                    ['weights', 'desc']
                 ]
             })
             let tag = await ArticleTags.findAll({ raw: true })
@@ -208,23 +210,34 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let id = ctx.query.id
-                let up = await Article.update(
-                    { status: 2 },
-                    {
-                        where: { id }
-                    }
-                )
+                let up = await Article.update({ status: 2 }, { where: { id }})
     
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Article.findAll({
-                        raw: true,
-                        where: { status: 2 },
-                        order: [
-                            //根据createdAt字段倒序排序
-                            ['createdAt', 'desc']
-                        ]
+                    if(ctx.query.status == 2) {
+                        var res = await Article.findAll({
+                            raw: true,
+                            where: { status: 2 },
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Article.findAll({
+                            raw: true,
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    let tag = await ArticleTags.findAll({ raw: true })
+                    let data = res.map(el => {
+                        el.tags = tag.filter(e => el.id === e.tag_id)
+                        return el
                     })
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
@@ -250,23 +263,35 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let id = ctx.query.id
-                let up = await Article.update(
-                    { status: 1 },
-                    {
-                        where: { id }
-                    }
-                )
+                let up = await Article.update({ status: 1 }, { where: { id }})
     
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Article.findAll({
-                        raw: true,
-                        where: { status: 2 },
-                        order: [
-                            //根据createdAt字段倒序排序
-                            ['createdAt', 'desc']
-                        ]
+                    if(ctx.query.status == 2) {
+                        var res = await Article.findAll({
+                            raw: true,
+                            where: { status: 2 },
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Article.findAll({
+                            raw: true,
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    let tag = await ArticleTags.findAll({ raw: true })
+                    let data = res.map(el => {
+                        el.tags = tag.filter(e => el.id === e.tag_id)
+                        return el
                     })
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
@@ -292,23 +317,35 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let id = ctx.query.id
-                let up = await Article.update(
-                    { status: 0 },
-                    {
-                        where: { id }
-                    }
-                )
+                let up = await Article.update({ status: 0 }, { where: { id }})
     
                 if(Array.isArray(up) && up[0] !== 0) {
-                    let res = await Article.findAll({
-                        raw: true,
-                        where: { status: 2 },
-                        order: [
-                            //根据createdAt字段倒序排序
-                            ['createdAt', 'desc']
-                        ]
+                    if(ctx.query.status == 2) {
+                        var res = await Article.findAll({
+                            raw: true,
+                            where: { status: 2 },
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    else {
+                        var res = await Article.findAll({
+                            raw: true,
+                            order: [
+                                //根据权重排序
+                                ['weights', 'desc']
+                            ]
+                        })
+                    }
+                    let tag = await ArticleTags.findAll({ raw: true })
+                    let data = res.map(el => {
+                        el.tags = tag.filter(e => el.id === e.tag_id)
+                        return el
                     })
-                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                    
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
                 } else {
                     Reply(ctx, { code: code.FAIL, message: 'id 错误' })
                 }
@@ -333,14 +370,14 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let id = ctx.query.id
-                let res = await Article.findOne({
+                let upres = await Article.findOne({
                     raw: true,
                     where:{ id }
                 })
                 
-                if(res !== null) {
-                    await Article.update({ read: res.read + 1 },{ where: { id } })
-                    let upres = await Article.findOne({
+                if(upres !== null) {
+                    await Article.update({ read: upres.read + 1 },{ where: { id } })
+                    let res = await Article.findOne({
                         raw: true,
                         where:{ id }
                     })
@@ -348,10 +385,11 @@ export default ({ app, router, validator, Reply, code }) => {
                         raw: true,
                         where: { tag_id: id }
                     })
-                    let data = (() => {
-                        upres.tags = tag
-                        return upres
-                    })()
+
+                    let data = ((el) => {
+                        el.tags = tag
+                        return el
+                    })(res)
 
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
                 }
