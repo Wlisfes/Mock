@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:18:39
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-17 23:34:19
+ * @LastEditTime: 2019-06-20 17:21:48
  * @Description: 笔记接口操作
  */
 
@@ -453,7 +453,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
                 }
                 else {
-                    Reply(ctx, { code: code.FAIL, message: '修改失败！', err: error })
+                    Reply(ctx, { code: code.FAIL, message: '修改失败！' })
                 }
             } catch (error) {
                 console.log(error)

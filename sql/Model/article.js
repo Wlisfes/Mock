@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 15:56:14
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-19 00:24:13
+ * @LastEditTime: 2019-06-20 16:45:51
  * @Description: 文章数据表
  */
 
@@ -29,7 +29,7 @@ const Article = db.define("article", {
             type: int类型  文章作者id
         `
     },
-    title: {
+    name: {
         type: Sequelize.STRING,
         allowNull: false,
         comment: `
