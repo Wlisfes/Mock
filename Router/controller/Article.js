@@ -2,11 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
-<<<<<<< HEAD
- * @LastEditTime: 2019-06-20 00:02:41
-=======
- * @LastEditTime: 2019-06-20 21:08:35
->>>>>>> c0da12475cc04e702a1dae9a6bbdd16a64158761
+ * @LastEditTime: 2019-06-20 22:34:36
  * @Description: 文章接口操作
  */
 
@@ -247,6 +243,33 @@ export default ({ app, router, validator, Reply, code }) => {
             Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
         }
     });
+
+
+    //根据用户id获取文章
+    router.get('/uid/article',
+        validator.isToken({ code ,Reply }),
+        async(ctx) => {
+            try {
+                let session = ctx.session[code.TOKEN]
+                let res = await Article.findAll({
+                    raw: true,
+                    where: { uid: session.uid },
+                    order: [
+                        //根据weights字段倒序排序
+                        ['weights', 'desc']
+                    ]
+                })
+                let tag = await ArticleTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tag.filter(e => el.id === e.tag_id)
+                    return el
+                })
+                
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+            }
+    })
 
 
     //获取已开放文章
@@ -694,6 +717,57 @@ export default ({ app, router, validator, Reply, code }) => {
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+            }
+    })
+
+
+    //条件查询
+    router.post('/find/article',
+        async(ctx) => {
+            try {
+                let query = ctx.request.body
+                if(query.first && query.last) {
+                    let w = {}
+                    for(let k in query) {
+                        if(k != 'first' && k != 'last') {
+                            w[k] = query[k]
+                        }
+                    }
+                    w.createdAt = {
+                        [Op.gte]: `${query.first} 00:00:00`,
+                        [Op.lte]: `${query.last} 23:59:59`
+                    }
+
+                    var res = await Article.findAll({
+                        raw: true,
+                        where: w,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+                else {
+                    var res = await Article.findAll({
+                        raw: true,
+                        where: query,
+                        order: [
+                            //根据权重排序
+                            ['weights', 'desc']
+                        ]
+                    })
+                }
+
+                let tagsval = await ArticleTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tagsval.filter(e => el.id === e.tag_id)
+                    return el
+                })
+
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                console.log(error)
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error })
             }
     })
 
