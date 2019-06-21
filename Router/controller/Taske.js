@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-17 23:34:42
+ * @LastEditTime: 2019-06-22 00:02:50
  * @Description: 项目接口操作
  */
 
@@ -131,6 +131,33 @@ export default ({ app, router, validator, Reply, code }) => {
         } catch (error) {
             Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
         }
+    })
+
+
+    //根据用户id获取笔记
+    router.get('/uid/taske',
+        validator.isToken({ code ,Reply }),
+        async(ctx) => {
+            try {
+                let session = ctx.session[code.TOKEN]
+                let res = await Taske.findAll({
+                    raw: true,
+                    where: { uid: session.uid },
+                    order: [
+                        //根据weights字段倒序排序
+                        ['weights', 'desc']
+                    ]
+                })
+                let tag = await TaskeTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tag.filter(e => el.id === e.tag_id)
+                    return el
+                })
+                
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+            }
     })
 
 

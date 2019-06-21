@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:18:39
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-20 17:21:48
+ * @LastEditTime: 2019-06-22 00:02:12
  * @Description: 笔记接口操作
  */
 
@@ -121,6 +121,33 @@ export default ({ app, router, validator, Reply, code }) => {
         } catch (error) {
             Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
         }
+    })
+
+
+    //根据用户id获取笔记
+    router.get('/uid/book',
+        validator.isToken({ code ,Reply }),
+        async(ctx) => {
+            try {
+                let session = ctx.session[code.TOKEN]
+                let res = await Book.findAll({
+                    raw: true,
+                    where: { uid: session.uid },
+                    order: [
+                        //根据weights字段倒序排序
+                        ['weights', 'desc']
+                    ]
+                })
+                let tag = await BookTags.findAll({ raw: true })
+                let data = res.map(el => {
+                    el.tags = tag.filter(e => el.id === e.tag_id)
+                    return el
+                })
+                
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+            }
     })
 
 
