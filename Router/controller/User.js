@@ -2,7 +2,7 @@
  * @Date: 2019-05-29 16:32:08
  * @Author: 情雨随风
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-17 23:18:54
+ * @LastEditTime: 2019-06-22 18:04:27
  * @Description: 用户接口操作
  */
 
@@ -192,6 +192,43 @@ export default ({ app, router, validator, Reply, code }) => {
                     }
                 } else {
                     Reply(ctx, { code: code.FAIL, message: '手机号未注册！' })
+                }
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
+            }
+    })
+
+
+    //登录后修改密码
+    router.post('/uid/userpssw',
+        validator.isToken({ code ,Reply }),
+        validator.isPrams({
+            key: {
+                password: {
+                    rule: validator.string().isRequire(),
+                    message: "password 不能为空且不能是纯数字"
+                }
+            },
+            method: "POST",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let session = ctx.session[code.TOKEN]
+                let upRes = await User.update(
+                    { password: validator.MD5(ctx.request.body.password) },
+                    {
+                        where: { uid: session.uid }
+                    }
+                )
+                if(Array.isArray(upRes) && upRes[0] !== 0) {
+                    let res = await User.findOne({ where: { uid: session.uid }})
+
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: res })
+                }
+                else {
+                    Reply(ctx, { code: code.FAIL, message: '修改失败！' })
                 }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '修改失败！', err: error })
