@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-03 21:59:24
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-22 00:02:50
+ * @LastEditTime: 2019-08-04 23:41:59
  * @Description: 项目接口操作
  */
 
@@ -134,7 +134,79 @@ export default ({ app, router, validator, Reply, code }) => {
     })
 
 
-    //根据用户id获取笔记
+    //获取已开放项目
+    router.get('/all/open/taske', async(ctx) => {
+        try {
+            var res = await Taske.findAll({
+                raw: true,
+                where: { status: 2 },
+                order: [
+                    //根据权重排序
+                    ['weights', 'desc']
+                ]
+                
+            })
+            let tagsval = await TaskeTags.findAll({ raw: true })
+            let data = res.map(el => {
+                el.tags = tagsval.filter(e => el.id === e.tag_id)
+                return el
+            })
+        
+            Reply(ctx, { code: code.SUCCESS, message: 'ok', data})
+        } catch (error) {
+            Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
+        }
+    })
+
+
+    //项目id点赞
+    router.get('/suki/taske',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let id = ctx.query.id
+                let res = await Taske.findOne({
+                    raw: true,
+                    where:{ id }
+                })
+                
+                if(res !== null) {
+                    await Taske.update({ suki: res.suki + 1 },{ where: { id } })
+                    let upres = await Taske.findOne({
+                        raw: true,
+                        where:{ id }
+                    })
+                    let tag = await TaskeTags.findAll({
+                        raw: true,
+                        where: { tag_id: id }
+                    })
+                    let data = (() => {
+                        upres.tags = tag
+                        return upres
+                    })()
+
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.FAIL, message: 'id 错误' })
+                }
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '点赞失败！', err: error.toString() })
+            }
+        }
+    )
+
+    //根据用户id获取项目
     router.get('/uid/taske',
         validator.isToken({ code ,Reply }),
         async(ctx) => {

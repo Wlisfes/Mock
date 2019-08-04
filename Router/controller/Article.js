@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-08-04 10:52:11
+ * @LastEditTime: 2019-08-04 11:34:16
  * @Description: 文章接口操作
  */
 
@@ -261,7 +261,6 @@ export default ({ app, router, validator, Reply, code }) => {
         async(ctx) => {
             try {
                 let id = ctx.query.id
-                console.log(id)
                 let tag = await ArticleTags.findAll({
                     raw: true,
                     where: { tagsfirst_id: id }
@@ -274,12 +273,24 @@ export default ({ app, router, validator, Reply, code }) => {
                         ['weights', 'desc']
                     ]
                 })
-                let data = res.map(el => {
-                    el.tags = tag.filter(e => el.id === e.tag_id)
-                    return el
-                })
-                
-                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+   
+                if (tag.length > 0) {
+                    let tag1 = await ArticleTags.findAll({
+                        raw: true
+                    })
+                    let k = res.filter(el => {
+                        let v = tag.some(e => e.tag_id === el.id)
+                        return v
+                    })
+                    let data = k.map(el => {
+                        el.tags = tag1.filter(e => el.id === e.tag_id)
+                        return el
+                    })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: [] })
+                }
             } catch (error) {
                 Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
         }
