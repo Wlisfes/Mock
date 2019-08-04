@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-05-31 23:31:08
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-14 23:30:06
+ * @LastEditTime: 2019-08-04 10:50:00
  * @Description: 
  */
 
@@ -341,6 +341,25 @@ class HttpApi {
     async AllArticle() {
         try {
             let res = await this.get('/all/article')
+            console.log(res)
+            if(res.code === 200) 
+                this.vm.$message({
+                    message: res.message,
+                    type: 'success'
+                })
+            else
+                this.vm.$message.error(res.message)
+        } catch (error) {
+            this.vm.$message.error('server 奔溃')
+        }
+    }
+
+    //根据标签获取开放文章
+    async AllTagsArticle() {
+        try {
+            let res = await this.get('/all/tags/article', {
+                id: '283ae981f6c85abb02021056a870afe4'
+            })
             console.log(res)
             if(res.code === 200) 
                 this.vm.$message({

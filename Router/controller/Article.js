@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-20 22:34:36
+ * @LastEditTime: 2019-08-04 10:52:11
  * @Description: 文章接口操作
  */
 
@@ -241,6 +241,47 @@ export default ({ app, router, validator, Reply, code }) => {
             Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
         } catch (error) {
             Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+        }
+    });
+
+
+    //根据标签id获取标签下的文章
+    router.get('/all/tags/article',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let id = ctx.query.id
+                console.log(id)
+                let tag = await ArticleTags.findAll({
+                    raw: true,
+                    where: { tagsfirst_id: id }
+                })
+                let res = await Article.findAll({
+                    raw: true,
+                    where: { status: 2 },
+                    order: [
+                        //根据weights字段倒序排序
+                        ['weights', 'desc']
+                    ]
+                })
+                let data = res.map(el => {
+                    el.tags = tag.filter(e => el.id === e.tag_id)
+                    return el
+                })
+                
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
         }
     });
 

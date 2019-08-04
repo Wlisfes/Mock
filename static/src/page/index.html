@@ -50,6 +50,7 @@
         <el-button type="primary" :style="Style" @click="delTags">删除标签</el-button>
 
         <el-button type="primary" :style="Style" @click="postArticle">新增文章</el-button>
+        <el-button type="primary" :style="Style" @click="AllTagsArticle">根据标签获取开放文章</el-button>
         <el-button type="primary" :style="Style" @click="AllArticle">获取全部文章</el-button>
         <el-button type="primary" :style="Style" @click="AllOpenArticle">获取已开放文章</el-button>
         <el-button type="primary" :style="Style" @click="AllDownArticle">获取已关闭文章</el-button>
@@ -129,6 +130,9 @@
                 },
                 postArticle() {
                     Api.postArticle()
+                },
+                AllTagsArticle() {
+                    Api.AllTagsArticle()
                 },
                 AllArticle() {
                     Api.AllArticle()
