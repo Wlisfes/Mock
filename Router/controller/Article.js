@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-01 16:17:26
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-08-04 11:34:16
+ * @LastEditTime: 2019-08-05 22:50:09
  * @Description: 文章接口操作
  */
 
@@ -83,6 +83,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     uid: session.uid,
                     name,
                     author: session.nickname,
+                    avatar: session.avatar,
                     description,
                     theme: theme || "OneDark",
                     Text,

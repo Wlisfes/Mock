@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:18:39
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-22 00:02:12
+ * @LastEditTime: 2019-08-05 23:08:55
  * @Description: 笔记接口操作
  */
 
@@ -82,6 +82,7 @@ export default ({ app, router, validator, Reply, code }) => {
                     Text,
                     theme: theme || 'OneDark',
                     author: session.nickname,
+                    avatar: session.avatar,
                     uid: session.uid,
                     Textvalue,
                     weights: weights || 1
@@ -122,6 +123,119 @@ export default ({ app, router, validator, Reply, code }) => {
             Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
         }
     })
+
+
+    //根据id查找笔记
+    router.get('/id/book',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let id = ctx.query.id
+                let res = await Book.findOne({
+                    raw: true,
+                    where:{ id }
+                })
+                let tag = await BookTags.findAll({
+                    raw: true,
+                    where: { tag_id: id }
+                })
+
+                let data = ((el) => {
+                    el.tags = tag
+                    return el
+                })(res)
+
+                Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+            }
+    })
+
+
+    //获取已开放的笔记
+    router.get('/all/open/book', async(ctx) => {
+        try {
+            var res = await Book.findAll({
+                raw: true,
+                where: { status: 2 },
+                order: [
+                    //根据权重排序
+                    ['weights', 'desc']
+                ]
+            })
+            let tagsval = await BookTags.findAll({ raw: true })
+            let data = res.map(el => {
+                el.tags = tagsval.filter(e => el.id === e.tag_id)
+                return el
+            })
+        
+            Reply(ctx, { code: code.SUCCESS, message: 'ok', data})
+        } catch (error) {
+            Reply(ctx, { code: code.REEOR, message: '添加失败！', err: error.toString() })
+        }
+    })
+
+
+    //根据标签id获取标签下的笔记
+    router.get('/all/tags/book',
+        validator.isPrams({
+            key: {
+                id: {
+                    rule: validator.isRequire(),
+                    message: "id 缺少！"
+                }
+            },
+            method: "GET",
+            code,
+            Reply
+        }),
+        async(ctx) => {
+            try {
+                let id = ctx.query.id
+                let tag = await BookTags.findAll({
+                    raw: true,
+                    where: { tagsfirst_id: id }
+                })
+                let res = await Book.findAll({
+                    raw: true,
+                    where: { status: 2 },
+                    order: [
+                        //根据weights字段倒序排序
+                        ['weights', 'desc']
+                    ]
+                })
+   
+                if (tag.length > 0) {
+                    let tag1 = await BookTags.findAll({
+                        raw: true
+                    })
+                    let k = res.filter(el => {
+                        let v = tag.some(e => e.tag_id === el.id)
+                        return v
+                    })
+                    let data = k.map(el => {
+                        el.tags = tag1.filter(e => el.id === e.tag_id)
+                        return el
+                    })
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data })
+                }
+                else {
+                    Reply(ctx, { code: code.SUCCESS, message: 'ok', data: [] })
+                }
+            } catch (error) {
+                Reply(ctx, { code: code.REEOR, message: '查询失败！', err: error.toString() })
+        }
+    });
 
 
     //根据用户id获取笔记

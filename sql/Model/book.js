@@ -2,7 +2,7 @@
  * @Author: 情雨随风
  * @Date: 2019-06-12 22:10:02
  * @LastEditors: 情雨随风
- * @LastEditTime: 2019-06-14 09:59:12
+ * @LastEditTime: 2019-08-05 22:45:10
  * @Description: 笔记数据表
  */
 
@@ -69,6 +69,14 @@ const Book = db.define("book",{
         comment: `
             allowNull: 不允许为null
             type: string类型  笔记创建作者
+        `
+    },
+    avatar: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        comment: `
+            allowNull: 不允许为null
+            type: string类型  笔记创建作者头像
         `
     },
     uid: {
